@@ -5,6 +5,8 @@ This is the project of the course's second Unit.
 The course is ministered by [Professor Rafael Beserra](http://www.dimap.ufrn.br/~rafaelbg/index.php).
 
 The project's requisites are:
+* Illumination
+* Texture
 
 ## Members ##
 Name | Student ID
