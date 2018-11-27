@@ -23,10 +23,8 @@ Well, the answer is simple, though it may be disappointing...
 1. It is a pun;
 2. This cute dog's name is Billy =D.
 
-**TODO: Add Billy's picture**
-
+![Billy learning to float](/imgs/billy.jpeg)
 
 ## Compiling and executing ##
 
-
-**TODO: Create makefile**
+**TODO: Add instructions**

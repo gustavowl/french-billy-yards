@@ -104,9 +104,9 @@ void funcaoDisplay() {
 	//draw plane
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, planeColor);
 	//glbindtexture(...
-	glBindTexture(GL_TEXTURE_2D, 0);
+	/*glBindTexture(GL_TEXTURE_2D, 0);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
-		0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
 	glBegin(GL_QUADS);
 		glNormal3f(0, 1, 0);
 
@@ -124,12 +124,13 @@ void funcaoDisplay() {
 	glEnd();
 
 	//draw cube
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
+	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, cubeColor);
 	glTranslatef(0, 0.5, 0);
 	glutSolidCube(1);
 
 	//draw sphere
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, sphereColor);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, sphereColor);
 	glTranslatef(0, 0, -2);
 	glutSolidSphere(0.5, 50, 50);
 
