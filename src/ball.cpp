@@ -1,11 +1,19 @@
 #include "ball.h"
+#include <stdio.h>
 
 Ball::Ball() {
-	GLfloat p[3] = {2112, 2, 3};
-	object(p);
+	GLfloat c[4] = {1, 1, 1, 1};
+	GLfloat p[3] = {0, 0, 0};
+	*this = Ball(c, p, 1);
 }
 
 Ball::Ball(GLfloat _color[4], GLfloat _position[3], GLfloat _radius) {
+	*this = Ball(_color, _position, _radius, 100, 100);
+}
+
+Ball::Ball(GLfloat _color[4], GLfloat _position[3], GLfloat _radius,
+		GLint _longitude, GLint _latitude) {
+
 	object(_position);
 	//copies parameters (not reference)
 	for (int i = 0; i < 4; i++)
@@ -15,6 +23,8 @@ Ball::Ball(GLfloat _color[4], GLfloat _position[3], GLfloat _radius) {
 		this->position[i] = _position[i];
 
 	this->radius = _radius;
+	this->linesOfLongitude = _longitude;
+	this->linesOfLatitude = _latitude;
 }
 
 void Ball::move() {
@@ -22,4 +32,32 @@ void Ball::move() {
 
 bool Ball::checkCollision(Object* obj) {
 	return false;
+}
+
+void Ball::draw() {
+	glPushMatrix();
+
+	glTranslatef(this->position[0], this->position[1], this->position[2]);
+	glutSolidSphere(this->radius, this->linesOfLongitude, this->linesOfLongitude);
+	printf("%f %d %d\n", this->radius, this->linesOfLongitude, this->linesOfLongitude);
+
+	glPopMatrix();
+}
+
+
+//Operators
+
+void Ball::operator=(const Ball &ball) {
+	object(ball.position);
+
+	for (int i = 0; i < 4; i++)
+		this->color[i] = ball.color[i];
+	
+	for (int i = 0; i < 3; i++)
+		this->position[i] = ball.position[i];
+
+	this->radius = ball.radius;
+	this->linesOfLongitude = ball.linesOfLongitude;
+	this->linesOfLatitude = ball.linesOfLatitude;
+	
 }

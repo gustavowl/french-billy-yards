@@ -15,7 +15,7 @@ GLfloat cubeColor[4] = {1, 0, 0, 1};
 GLfloat sphereColor[4] = {0, 1, 0, 1};
 GLfloat planeColor[4] = {0, 0, 1, 1};
 GLfloat posicaoLuz[4]={50.0, 0.0, 0.0, 1.0};
-Ball b;
+Ball whiteBall, redBall, yellowBall;
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
@@ -125,7 +125,7 @@ void funcaoDisplay() {
 		//glTexCoord2f(1, 0);
 		glVertex3f(-5, 0, 2.5);
 	glEnd();
-
+	/*
 	//draw cube
 	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, cubeColor);
@@ -135,9 +135,11 @@ void funcaoDisplay() {
 	//draw sphere
 	glMaterialfv(GL_FRONT, GL_SPECULAR, sphereColor);
 	glTranslatef(0, 0, -2);
-	glutSolidSphere(0.5, 50, 50);
+	glutSolidSphere(0.5, 50, 50);*/
 
 	glPopMatrix();
+
+	whiteBall.draw();
 
 	//glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 
@@ -183,10 +185,6 @@ void temporizador() {
 }
 
 int main(int argc, char **argv) {
-
-	GLfloat* a = b.getPosition();
-	printf("TESTE: %f\n", a[0]);
-	delete[] a;
 
 	srand(time(NULL));
 	glutInit(&argc, argv);

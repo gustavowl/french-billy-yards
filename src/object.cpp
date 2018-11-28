@@ -5,13 +5,15 @@ void Object::object() {
 	object(p);
 }
 
-void Object::object(GLfloat _position[3]) {
+void Object::object(const GLfloat _position[3]) {
 	GLfloat s = 0;
 	GLfloat d[3] = {0, 0, 0};
 	object(_position, s, d);
 }
 
-void Object::object(GLfloat _position[3], GLfloat _speed, GLfloat _direction[3]) {
+void Object::object(const GLfloat _position[3], const GLfloat _speed,
+		const GLfloat _direction[3]) {
+
 	for (int i = 0; i < 3; i++) {
 		this->position[i] = _position[i];
 	}
