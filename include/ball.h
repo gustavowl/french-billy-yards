@@ -5,7 +5,7 @@
 //#include <GL/glu.h>
 #include "object.h"
 
-class Ball : Object {
+class Ball : public Object {
 
 private:
 	GLfloat color[4];
@@ -19,6 +19,7 @@ public:
 	void move() override;
 	//TODO; check Neutrino effect?
 	bool checkCollision(Object* obj) override;
+
 };
 
 #endif
