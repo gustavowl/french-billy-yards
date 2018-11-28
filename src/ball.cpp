@@ -13,3 +13,10 @@ Ball::Ball(GLfloat _color[4], GLfloat _position[3], GLfloat _radius) {
 
 	this->radius = _radius;
 }
+
+void Ball::move() {
+}
+
+bool Ball::checkCollision(Object* obj) {
+	return false;
+}
