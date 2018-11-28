@@ -3,16 +3,18 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
+#include "ball.h"
 
 #define PI 3.1415926535897932
 
-double camera_eye[3] = {1, 2, 3};
+double camera_eye[3] = {0, 8, 1};
 double radius = 5.5;
 int angle_xz = 0, angle_y = 0;
 
 GLfloat cubeColor[4] = {1, 0, 0, 1};
 GLfloat sphereColor[4] = {0, 1, 0, 1};
 GLfloat planeColor[4] = {0, 0, 1, 1};
+GLfloat posicaoLuz[4]={50.0, 0.0, 0.0, 1.0};
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
@@ -38,10 +40,7 @@ double degress_to_rad(int degrees) {
 	return degrees * PI / 180.0;
 }
 void inicializacao() {
-	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
-	glShadeModel(GL_FLAT);
-	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
-
+	//TODO
 	//GLfloat glVetorCor[4] = {1, 0, 0, 0};
 	//glLightfv(GL_LIGHT0, GL_AMBIENT, glVetorCor);
 	
@@ -49,6 +48,7 @@ void inicializacao() {
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE);
+	glShadeModel(GL_FLAT);
 
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);
@@ -64,6 +64,7 @@ void inicializacao() {
 	/*glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
 		0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
 
+	//glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 }
 
 void printModelView() {
@@ -93,6 +94,7 @@ void funcaoDisplay() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
+	//glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	//altere gluLookAt para movimentar a camera ao redor da cidade
@@ -110,17 +112,17 @@ void funcaoDisplay() {
 	glBegin(GL_QUADS);
 		glNormal3f(0, 1, 0);
 
-		glTexCoord2f(0, 0);
-		glVertex3f(-3, 0, -3);
+		//glTexCoord2f(0, 0);
+		glVertex3f(-5, 0, -2.5);
 
-		glTexCoord2f(0, 1);
-		glVertex3f(3, 0, -3);
+		//glTexCoord2f(0, 1);
+		glVertex3f(5, 0, -2.5);
 
-		glTexCoord2f(1, 1);
-		glVertex3f(3, 0, 3);
+		//glTexCoord2f(1, 1);
+		glVertex3f(5, 0, 2.5);
 
-		glTexCoord2f(1, 0);
-		glVertex3f(-3, 0, 3);
+		//glTexCoord2f(1, 0);
+		glVertex3f(-5, 0, 2.5);
 	glEnd();
 
 	//draw cube
@@ -135,6 +137,9 @@ void funcaoDisplay() {
 	glutSolidSphere(0.5, 50, 50);
 
 	glPopMatrix();
+
+	//glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+
 	glFlush();
 	glutSwapBuffers();
 }
@@ -181,9 +186,9 @@ int main(int argc, char **argv) {
 	srand(time(NULL));
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800, 800);
-	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Predios");
+	glutInitWindowSize(1000, 1000);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("French Billy-yards");
 	glutKeyboardFunc(funcaoKeyboard);
 	glutDisplayFunc(funcaoDisplay);
 	glutIdleFunc(temporizador);
