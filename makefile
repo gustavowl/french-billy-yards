@@ -1,13 +1,13 @@
 CC = g++
-INCDIR = include
+INCLDIR = include
 SRCDIR = src
 BINDIR = bin
-OPENGLFLAGS = -lGL -lGLU -lglut
+OPENGLFLAGS = -lGL -lGLU -lglut -std=c++11
 CFLAGS = $(OPENGLFLAGS)
-INCFLAG = -I $(INCDIR)
+INCLFLAG = -I $(INCLDIR)
 
 billy-yards: $(SRCDIR)/french-billy-yards.cpp
 	@mkdir -p $(BINDIR)
 	@echo "Begin compiling..."
-	g++ $(SRCDIR)/*.cpp $(CFLAGS) $(INCFLAG) -o $(BINDIR)/french-billy-yards -Wall
+	g++ $(SRCDIR)/*.cpp $(CFLAGS) $(INCLFLAG) -o $(BINDIR)/french-billy-yards -Wall
 	@echo "Compiling finished"
