@@ -1,5 +1,4 @@
 #include "ball.h"
-#include <stdio.h>
 
 Ball::Ball() {
 	GLfloat c[4] = {1, 1, 1, 1};
@@ -39,7 +38,9 @@ void Ball::draw() {
 
 	glTranslatef(this->position[0], this->position[1], this->position[2]);
 	glutSolidSphere(this->radius, this->linesOfLongitude, this->linesOfLongitude);
-	printf("%f %d %d\n", this->radius, this->linesOfLongitude, this->linesOfLongitude);
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, this->color);
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->color);
 
 	glPopMatrix();
 }

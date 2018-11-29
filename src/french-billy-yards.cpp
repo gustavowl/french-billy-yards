@@ -6,6 +6,7 @@
 #include "ball.h"
 
 #define PI 3.1415926535897932
+#define BALL_RADIUS 0.5
 
 double camera_eye[3] = {0, 8, 1};
 double radius = 5.5;
@@ -13,9 +14,12 @@ int angle_xz = 0, angle_y = 0;
 
 GLfloat cubeColor[4] = {1, 0, 0, 1};
 GLfloat sphereColor[4] = {0, 1, 0, 1};
-GLfloat planeColor[4] = {0, 0, 1, 1};
-GLfloat posicaoLuz[4]={50.0, 0.0, 0.0, 1.0};
-Ball whiteBall, redBall, yellowBall;
+GLfloat planeColor[4] = {0, 0.7, 0, 1};
+GLfloat posicaoLuz[4]={50.0, 50.0, 50.0, 1.0};
+float f[4] = {1, 1, 1, 1};
+float g[3] = {0, BALL_RADIUS, 0};
+Ball whiteBall(f, g, BALL_RADIUS),
+	 redBall, yellowBall;
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
@@ -44,12 +48,13 @@ void inicializacao() {
 	//TODO
 	//GLfloat glVetorCor[4] = {1, 0, 0, 0};
 	//glLightfv(GL_LIGHT0, GL_AMBIENT, glVetorCor);
+	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz);
 	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_TEXTURE);
-	glShadeModel(GL_FLAT);
+	//glEnable(GL_TEXTURE);
+	glShadeModel(GL_SMOOTH);
 
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);
@@ -90,54 +95,46 @@ void printProjection() {
 	}
 }
 
+void drawPlane() {
+	glPushMatrix();
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, planeColor);
+	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
+
+	glScalef(10, 0.2, 5);
+	glTranslatef(0, -0.5, 0);
+	glutSolidCube(1);
+
+	glPopMatrix();
+}
+
 void funcaoDisplay() {
 	//limpa a tela com a cor de fundo
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
-	//glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	//altere gluLookAt para movimentar a camera ao redor da cidade
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
 	
-	glPushMatrix();
 	
-	//draw plane
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, planeColor);
-	//glbindtexture(...
-	/*glBindTexture(GL_TEXTURE_2D, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
-		0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
-	glBegin(GL_QUADS);
-		glNormal3f(0, 1, 0);
-
-		//glTexCoord2f(0, 0);
-		glVertex3f(-5, 0, -2.5);
-
-		//glTexCoord2f(0, 1);
-		glVertex3f(5, 0, -2.5);
-
-		//glTexCoord2f(1, 1);
-		glVertex3f(5, 0, 2.5);
-
-		//glTexCoord2f(1, 0);
-		glVertex3f(-5, 0, 2.5);
-	glEnd();
-	/*
+	drawPlane();	
+	
+	
 	//draw cube
 	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
+	glPushMatrix();
 	glMaterialfv(GL_FRONT, GL_SPECULAR, cubeColor);
-	glTranslatef(0, 0.5, 0);
+	glTranslatef(-1, 0, 0);
 	glutSolidCube(1);
-
+	glPopMatrix();
+	/*
 	//draw sphere
 	glMaterialfv(GL_FRONT, GL_SPECULAR, sphereColor);
 	glTranslatef(0, 0, -2);
 	glutSolidSphere(0.5, 50, 50);*/
-
-	glPopMatrix();
 
 	whiteBall.draw();
 
@@ -177,7 +174,6 @@ int t = 0;
 
 void temporizador() {
 	t++;
-	//printf("%d ", t);	
 	if (t == 2112 * 73) {
 		glutPostRedisplay();
 		t = 0;
@@ -201,4 +197,3 @@ int main(int argc, char **argv) {
 
 	return 0;
 }
-
