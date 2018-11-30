@@ -8,6 +8,7 @@
 #define PI 3.1415926535897932
 //#define BALL_RADIUS 0.2165492957746479
 #define BALL_RADIUS 0.217
+#define CM 0.035
 
 double camera_eye[3] = {0, 8, 1};
 double radius = 5.5;
@@ -93,10 +94,17 @@ void drawPlane() {
 }
 
 void drawCue() {
+	//TODO: create class
+	//TODO: cue stick has no "lids"
 	glPushMatrix();
 
-	glTranslatef(5, 0, -2.5);
-	gluCylinder(quadricObj, 1.0, 1.0, 5.0, 50, 16);
+	GLfloat cueColor[4] = {0.4, 0.2, 0.0, 1.0};
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, cueColor);
+
+	glRotatef(45, 0, 1, 0);
+	glTranslatef(0, BALL_RADIUS, BALL_RADIUS + 0.1);
+	//gluCylinder(quadricObj, 0.042, 0.084, 5.0, 50, 20);
+	gluCylinder(quadricObj, 0.021, 0.042, 5.35, 50, 20);
 
 	glPopMatrix();
 }
