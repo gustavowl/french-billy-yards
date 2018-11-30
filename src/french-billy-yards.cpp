@@ -82,15 +82,43 @@ void inicializacao() {
 
 }
 
-void drawPlane() {
+void drawTable() {
 	glPushMatrix();
-
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
 	glScalef(10, 0.2, 5);
 	glTranslatef(0, -0.5, 0);
 	glutSolidCube(1);
-
 	glPopMatrix();
+
+	//Generate borders
+	//Top
+	glPushMatrix();
+	glTranslatef(0, BALL_RADIUS, - 2.5 - BALL_RADIUS);
+	glScalef(10 + BALL_RADIUS * 4, BALL_RADIUS * 2, BALL_RADIUS * 2);
+	glutSolidCube(1);
+	glPopMatrix();
+	
+	//Bottom
+	glPushMatrix();
+	glTranslatef(0, BALL_RADIUS, 2.5 + BALL_RADIUS);
+	glScalef(10 + BALL_RADIUS * 4, BALL_RADIUS * 2, BALL_RADIUS * 2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	//Right
+	glPushMatrix();
+	glTranslatef(5 + BALL_RADIUS, BALL_RADIUS, 0);
+	glScalef(BALL_RADIUS * 2, BALL_RADIUS * 2, 5);
+	glutSolidCube(1);
+	glPopMatrix();
+	
+	//Left
+	glPushMatrix();
+	glTranslatef(-5 - BALL_RADIUS, BALL_RADIUS, 0);
+	glScalef(BALL_RADIUS * 2, BALL_RADIUS * 2, 5);
+	glutSolidCube(1);
+	glPopMatrix();
+
 }
 
 void drawCue() {
@@ -119,7 +147,7 @@ void funcaoDisplay() {
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
 	
-	drawPlane();	
+	drawTable();	
 	whiteBall.draw();
 	redBall.draw();
 	yellowBall.draw();
