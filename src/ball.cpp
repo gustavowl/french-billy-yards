@@ -25,6 +25,16 @@ Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
 	this->linesOfLatitude = _latitude;
 }
 
+//gets and sets
+void Ball::setRadius(GLfloat _radius) {
+	if (_radius > 0)
+		this->radius = _radius;
+}
+
+GLfloat Ball::getRadius() {
+	return this->radius;
+}
+
 void Ball::move() {
 }
 

@@ -7,6 +7,7 @@
 
 class Cue : public Object {
 private:
+	//TODO: cue stick has no "lids"
 	//TODO: add texture
 	GLfloat color[3];
 
@@ -16,7 +17,7 @@ private:
 	GLfloat topRadius; //radius at z=height
 	GLfloat height;
 	GLfloat slices; //subdvisions around z axis (alter circle smoothness)
-	GLfloat stack; //subdvision along z axis (along height)
+	GLfloat stacks; //subdvision along z axis (along height)
 
 	//determine cylinder position
 	Ball* ball; //cue ball
@@ -34,7 +35,7 @@ public:
 
 	//constructors and destructors
 	Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _height,
-			GLfloat _slices, GLfloat _stack, Ball* _ball);
+			GLfloat _slices, GLfloat _stacks, Ball* _ball);
 	~Cue(); //destroy quadric object
 
 	//gets and set

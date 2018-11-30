@@ -5,6 +5,7 @@
 #include <math.h>
 #include "ball.h"
 #include "table.h"
+#include "cue.h"
 
 #define PI 3.1415926535897932
 //#define BALL_RADIUS 0.2165492957746479
@@ -22,6 +23,7 @@ GLfloat colorWhite[3] = {1, 1, 1};
 GLfloat colorRed[3] = {1, 0, 0};
 GLfloat colorYellow[3] = {1, 1, 0};
 GLfloat colorTable[4] = {0, 0.1, 0, 1};
+GLfloat colorCue[3] = {0.4, 0.2, 0.0};
 
 GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
 
@@ -36,6 +38,7 @@ Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
 
 Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
 
+Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 
 //Cylinder for Cue stick
 GLUquadric* quadricObj = gluNewQuadric();
@@ -120,7 +123,8 @@ void funcaoDisplay() {
 	whiteBall.draw();
 	redBall.draw();
 	yellowBall.draw();
-	drawCue();
+	//drawCue();
+	cue.draw();
 
 	glFlush();
 	glutSwapBuffers();

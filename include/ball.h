@@ -19,6 +19,10 @@ public:
 	Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
 			GLint _longitude, GLint _latitude);
 
+	//sets and gets
+	void setRadius(GLfloat _radius);
+	GLfloat getRadius();
+
 	void move() override;
 	//TODO; check Neutrino effect?
 	bool checkCollision(Object* obj) override;

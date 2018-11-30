@@ -10,12 +10,20 @@ bool Cue::checkCollision(Object* obj) {
 
 void Cue:: draw() {
 	glPushMatrix();
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);
+		//TODO: calculate rotation vector
+		glRotatef(this->angle, 0, 1, 0);
+		glTranslatef(0, ball->getRadius(), ball->getRadius() + this->force * 0.1);
+
+		gluCylinder(this->qobj, this->baseRadius, this->topRadius, this->height,
+				this->slices, this->stacks);
+
 	glPopMatrix();
 }
 
 //constructors and destructors
 Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _height,
-		GLfloat _slices, GLfloat _stack, Ball* _ball) {
+		GLfloat _slices, GLfloat _stacks, Ball* _ball) {
 
 	for (int i = 0; i < 3; i++)
 		this->color[i] = _color[i];
@@ -25,7 +33,7 @@ Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _he
 	this->topRadius = _topRadius;
 	this->height = _height;
 	this->slices = _slices;
-	this->stack = _stack;
+	this->stacks = _stacks;
 
 	this->ball = _ball;
 	this->angle = 0.f;
@@ -94,7 +102,7 @@ void Cue::operator=(const Cue &cue) {
 	this->topRadius = cue.topRadius;
 	this->height = cue.height;
 	this->slices = cue.slices;
-	this->stack = cue.stack;
+	this->stacks = cue.stacks;
 
 	//copies cue ball.
 	//would it be better to copy the reference to the ball?
