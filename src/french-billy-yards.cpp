@@ -14,9 +14,9 @@ double camera_eye[3] = {0, 8, 1};
 double radius = 5.5;
 int angle_xz = 0, angle_y = 0;
 
-GLfloat colorWhite[4] = {1, 1, 1, 1};
-GLfloat colorRed[4] = {1, 0, 0, 1};
-GLfloat colorYellow[4] = {1, 1, 0, 1};
+GLfloat colorWhite[3] = {1, 1, 1};
+GLfloat colorRed[3] = {1, 0, 0};
+GLfloat colorYellow[3] = {1, 1, 0};
 GLfloat planeColor[4] = {0, 0.1, 0, 1};
 
 GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};

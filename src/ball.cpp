@@ -1,24 +1,22 @@
 #include "ball.h"
 
 Ball::Ball() {
-	GLfloat c[4] = {1, 1, 1, 1};
+	GLfloat c[3] = {1, 1, 1};
 	GLfloat p[3] = {0, 0, 0};
 	*this = Ball(c, p, 1);
 }
 
-Ball::Ball(GLfloat _color[4], GLfloat _position[3], GLfloat _radius) {
+Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius) {
 	*this = Ball(_color, _position, _radius, 100, 100);
 }
 
-Ball::Ball(GLfloat _color[4], GLfloat _position[3], GLfloat _radius,
+Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
 		GLint _longitude, GLint _latitude) {
 
 	object(_position);
 	//copies parameters (not reference)
-	for (int i = 0; i < 4; i++)
-		this->color[i] = _color[i];
-
 	for (int i = 0; i < 3; i++)
+		this->color[i] = _color[i];
 		this->position[i] = _position[i];
 
 	this->radius = _radius;
@@ -48,11 +46,9 @@ void Ball::draw() {
 
 void Ball::operator=(const Ball &ball) {
 	object(ball.position);
-
-	for (int i = 0; i < 4; i++)
-		this->color[i] = ball.color[i];
 	
 	for (int i = 0; i < 3; i++)
+		this->color[i] = ball.color[i];
 		this->position[i] = ball.position[i];
 
 	this->radius = ball.radius;
