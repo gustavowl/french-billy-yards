@@ -46,8 +46,11 @@ double degress_to_rad(int degrees) {
 }
 void inicializacao() {
 	//TODO
-	//GLfloat glVetorCor[4] = {1, 0, 0, 0};
-	//glLightfv(GL_LIGHT0, GL_AMBIENT, glVetorCor);
+	GLfloat diffspec[4] = {1, 1, 1, 1};
+	GLfloat ambient[4] = {0, 0, 0, 1};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffspec);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, diffspec);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz);
 	
 	glEnable(GL_LIGHTING);
@@ -73,38 +76,20 @@ void inicializacao() {
 	//glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 }
 
-void printModelView() {
-	GLfloat v[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, v);
-	printf("=========== MODELVIEW ===========\n");
-	for(int i = 0; i < 4; i++) {
-		for(int j = 0; j < 4; j++)
-			printf("%f ", v[j*4+i]);
-		printf("\n");
-	}
-}
-
-void printProjection() {
-	GLfloat v[16];
-	glGetFloatv(GL_PROJECTION_MATRIX, v);
-	printf("=========== PROJECTION ===========\n");
-	for(int i = 0; i < 4; i++) {
-		for(int j = 0; j < 4; j++)
-			printf("%f ", v[j*4+i]);
-		printf("\n");
-	}
-}
-
 void drawPlane() {
 	glPushMatrix();
 
-	glMaterialfv(GL_FRONT, GL_SPECULAR, planeColor);
+	glColor4f(planeColor[0], planeColor[1], planeColor[2], planeColor[4]);
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, planeColor);
 	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
+	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, planeColor);
 
 	glScalef(10, 0.2, 5);
 	glTranslatef(0, -0.5, 0);
 	glutSolidCube(1);
 
+	//glEnable(GL_COLOR_MATERIAL);
 	glPopMatrix();
 }
 
@@ -119,17 +104,16 @@ void funcaoDisplay() {
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
 	
-	
 	drawPlane();	
-	
 	
 	//draw cube
 	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
-	glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_SPECULAR, cubeColor);
+	/*glPushMatrix();
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, cubeColor);
 	glTranslatef(-1, 0, 0);
 	glutSolidCube(1);
-	glPopMatrix();
+	glPopMatrix();*/
+
 	/*
 	//draw sphere
 	glMaterialfv(GL_FRONT, GL_SPECULAR, sphereColor);

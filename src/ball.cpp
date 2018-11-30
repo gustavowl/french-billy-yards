@@ -36,12 +36,19 @@ bool Ball::checkCollision(Object* obj) {
 void Ball::draw() {
 	glPushMatrix();
 
+	//float g[4] = {0.1, 0.1, 0.1, 1};
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, g);
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->color);
+	glColor4fv(this->color);
+	//glColorMaterial(GL_FRONT, GL_SPECULAR);
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, g);
+	//float ambient[4] = {0, 0, 0, 1};
+	//glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+
 	glTranslatef(this->position[0], this->position[1], this->position[2]);
 	glutSolidSphere(this->radius, this->linesOfLongitude, this->linesOfLongitude);
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, this->color);
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->color);
-
+	
 	glPopMatrix();
 }
 
