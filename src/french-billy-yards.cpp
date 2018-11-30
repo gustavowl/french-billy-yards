@@ -6,20 +6,27 @@
 #include "ball.h"
 
 #define PI 3.1415926535897932
-#define BALL_RADIUS 0.5
+//#define BALL_RADIUS 0.2165492957746479
+#define BALL_RADIUS 0.217
 
 double camera_eye[3] = {0, 8, 1};
 double radius = 5.5;
 int angle_xz = 0, angle_y = 0;
 
-GLfloat cubeColor[4] = {1, 0, 0, 1};
-GLfloat sphereColor[4] = {0, 1, 0, 1};
-GLfloat planeColor[4] = {0, 0.7, 0, 1};
-GLfloat posicaoLuz[4]={50.0, 50.0, 50.0, 1.0};
-float f[4] = {1, 1, 1, 1};
-float g[3] = {0, BALL_RADIUS, 0};
-Ball whiteBall(f, g, BALL_RADIUS),
-	 redBall, yellowBall;
+GLfloat colorWhite[4] = {1, 1, 1, 1};
+GLfloat colorRed[4] = {1, 0, 0, 1};
+GLfloat colorYellow[4] = {1, 1, 0, 1};
+GLfloat planeColor[4] = {0, 0.1, 0, 1};
+
+GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
+
+GLfloat posWhite[3] = {0, BALL_RADIUS, 0};
+GLfloat posRed[3] = {1, BALL_RADIUS, 1.5};
+GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};
+
+Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
+	 redBall(colorRed, posRed, BALL_RADIUS),
+	 yellowBall(colorYellow, posYellow, BALL_RADIUS);
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
@@ -79,17 +86,11 @@ void inicializacao() {
 void drawPlane() {
 	glPushMatrix();
 
-	glColor4f(planeColor[0], planeColor[1], planeColor[2], planeColor[4]);
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, planeColor);
-	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
-	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, planeColor);
-
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
 	glScalef(10, 0.2, 5);
 	glTranslatef(0, -0.5, 0);
 	glutSolidCube(1);
 
-	//glEnable(GL_COLOR_MATERIAL);
 	glPopMatrix();
 }
 
@@ -100,29 +101,13 @@ void funcaoDisplay() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	//altere gluLookAt para movimentar a camera ao redor da cidade
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
 	
 	drawPlane();	
-	
-	//draw cube
-	//glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cubeColor);
-	/*glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, cubeColor);
-	glTranslatef(-1, 0, 0);
-	glutSolidCube(1);
-	glPopMatrix();*/
-
-	/*
-	//draw sphere
-	glMaterialfv(GL_FRONT, GL_SPECULAR, sphereColor);
-	glTranslatef(0, 0, -2);
-	glutSolidSphere(0.5, 50, 50);*/
-
 	whiteBall.draw();
-
-	//glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+	redBall.draw();
+	yellowBall.draw();
 
 	glFlush();
 	glutSwapBuffers();
