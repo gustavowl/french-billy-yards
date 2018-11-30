@@ -28,7 +28,6 @@ public:
 	GLfloat* getDirection(); //REMEMBER: remember to dealoacte memory (delete[])
 	void setDirection(GLfloat _direction[3]);
 
-
 };
 
 #endif

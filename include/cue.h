@@ -1,9 +1,14 @@
 #ifndef __CUE_H_
 #define __CUE_H_
 
+#ifndef PI
+	#define PI 3.1415926535897932
+#endif
+
 #include <GL/glut.h>
 #include "object.h"
 #include "ball.h"
+#include <math.h>
 
 class Cue : public Object {
 private:
@@ -32,6 +37,8 @@ public:
 	void move() override;
 	bool checkCollision(Object* obj) override; //TODO: check neutrino effect?
 	void draw() override;
+
+	void setDirection(GLfloat _angle);
 
 	//constructors and destructors
 	Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _height,

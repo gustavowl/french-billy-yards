@@ -23,6 +23,15 @@ void Cue:: draw() {
 	}
 }
 
+void Cue::setDirection(GLfloat _angle) {
+	//angle 0 = [0, -1]
+	//angle 90 = [-1, 0]
+	//angle 180 = [0, 1]
+	//angle 270 = [1, 0]
+	this->direction[0] = - sin(_angle * PI / 180.0);
+	this->direction[2] = - cos(_angle * PI / 180.0);
+}
+
 //constructors and destructors
 Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _height,
 		GLfloat _slices, GLfloat _stacks, Ball* _ball) {
@@ -39,10 +48,11 @@ Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _he
 	this->stacks = _stacks;
 
 	this->ball = _ball;
-	this->angle = 0.f;
+	this->setAngle(0.f);
 	GLfloat* ballPos = this->ball->getPosition();
 	for (int i = 0; i < 3; i++)
-		this->target[i] = ballPos[i];
+		this->target[i] = ballPos[i] + this->direction[i];
+	
 	delete[] ballPos;
 
 	visible = true;
@@ -78,6 +88,7 @@ void Cue::setAngle(GLfloat _angle) {
 		_angle += 360;
 
 	this->angle = _angle;
+	this->setDirection(_angle);
 }
 
 GLfloat Cue::getAngle() {
@@ -94,8 +105,7 @@ void Cue::shoot() {
 	//TODO: calculate lots of stuff
 	//TODO: calculate mass and acceleration
 	//TODO: calculate shot direction
-	GLfloat dir[3] = {0, 0, -1};
-	this->ball->setDirection(dir);
+	this->ball->setDirection(this->direction);
 	this->ball->setSpeed(this->force);	
 }
 

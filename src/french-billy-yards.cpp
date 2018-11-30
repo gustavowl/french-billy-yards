@@ -7,7 +7,9 @@
 #include "table.h"
 #include "cue.h"
 
-#define PI 3.1415926535897932
+#ifndef PI
+	#define PI 3.1415926535897932
+#endif
 //#define BALL_RADIUS 0.2165492957746479
 #define BALL_RADIUS 0.217
 #define CM 0.035 //centimeters
