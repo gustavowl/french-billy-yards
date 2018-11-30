@@ -28,6 +28,9 @@ Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
 	 redBall(colorRed, posRed, BALL_RADIUS),
 	 yellowBall(colorYellow, posYellow, BALL_RADIUS);
 
+//Cylinder for Cue stick
+GLUquadric* quadricObj = gluNewQuadric();
+
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
 int width, height;
@@ -72,15 +75,10 @@ void inicializacao() {
 	glMatrixMode(GL_PROJECTION);
 	//alterne e altere as projecoes para alcancar os resultados desejados
 	glFrustum(-1, 1, -1, 1, 1.5, 20.0);
-	//glOrtho(-1, 1, -1, 1, 1.5, 20.0);
-	//gluPerspective(60, 1, 1.5, 60.0);
 
-	//glGenTextures(1, tex_v);
-	//loadPPM("imagem.ppm");
-	/*glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
-		0, GL_RGB, GL_UNSIGNED_BYTE, data);*/
+	//cue stick
+	gluQuadricNormals(quadricObj, GLU_SMOOTH);
 
-	//glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
 }
 
 void drawPlane() {
@@ -90,6 +88,15 @@ void drawPlane() {
 	glScalef(10, 0.2, 5);
 	glTranslatef(0, -0.5, 0);
 	glutSolidCube(1);
+
+	glPopMatrix();
+}
+
+void drawCue() {
+	glPushMatrix();
+
+	glTranslatef(5, 0, -2.5);
+	gluCylinder(quadricObj, 1.0, 1.0, 5.0, 50, 16);
 
 	glPopMatrix();
 }
@@ -108,6 +115,7 @@ void funcaoDisplay() {
 	whiteBall.draw();
 	redBall.draw();
 	yellowBall.draw();
+	drawCue();
 
 	glFlush();
 	glutSwapBuffers();
@@ -149,6 +157,10 @@ void temporizador() {
 	}
 }
 
+void cleanup() {
+	gluDeleteQuadric(quadricObj);
+}
+
 int main(int argc, char **argv) {
 
 	srand(time(NULL));
@@ -163,6 +175,8 @@ int main(int argc, char **argv) {
 	inicializacao();
 
 	glutMainLoop();
+
+	cleanup();
 
 	return 0;
 }
