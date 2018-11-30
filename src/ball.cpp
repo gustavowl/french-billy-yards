@@ -15,9 +15,10 @@ Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
 
 	object(_position);
 	//copies parameters (not reference)
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++) {
 		this->color[i] = _color[i];
 		this->position[i] = _position[i];
+	}
 
 	this->radius = _radius;
 	this->linesOfLongitude = _longitude;
@@ -47,9 +48,10 @@ void Ball::draw() {
 void Ball::operator=(const Ball &ball) {
 	object(ball.position);
 	
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++) {
 		this->color[i] = ball.color[i];
 		this->position[i] = ball.position[i];
+	}
 
 	this->radius = ball.radius;
 	this->linesOfLongitude = ball.linesOfLongitude;
