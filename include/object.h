@@ -22,8 +22,12 @@ public:
 
 	virtual void draw() = 0;
 
-	//REMEMBER: remember to dealoacte memory (delete[])
-	GLfloat* getPosition();
+	GLfloat* getPosition(); //REMEMBER: remember to dealoacte memory (delete[])
+	GLfloat getSpeed();
+	void setSpeed(GLfloat _speed);
+	GLfloat* getDirection(); //REMEMBER: remember to dealoacte memory (delete[])
+	void setDirection(GLfloat _direction[3]);
+
 
 };
 

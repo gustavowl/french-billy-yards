@@ -1,4 +1,5 @@
 #include "ball.h"
+#include <stdio.h>
 
 Ball::Ball() {
 	GLfloat c[3] = {1, 1, 1};
@@ -36,6 +37,12 @@ GLfloat Ball::getRadius() {
 }
 
 void Ball::move() {
+	//TODO: floating-point error
+	if (this->speed != 0) {
+		for (int i = 0; i < 3; i++) {
+			this->position[i] += this->direction[i] * this->speed;
+		}
+	}
 }
 
 bool Ball::checkCollision(Object* obj) {
@@ -43,6 +50,8 @@ bool Ball::checkCollision(Object* obj) {
 }
 
 void Ball::draw() {
+	this->move();
+
 	glPushMatrix();
 
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);

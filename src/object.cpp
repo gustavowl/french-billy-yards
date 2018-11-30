@@ -31,3 +31,23 @@ GLfloat* Object::getPosition() {
 		p[i] = this->position[i];
 	return p;
 }
+
+GLfloat Object::getSpeed() {
+	return this->speed;
+}
+
+void Object::setSpeed(GLfloat _speed) {
+	this->speed = _speed;
+}
+
+GLfloat* Object::getDirection() {
+	GLfloat* d = new GLfloat[3];
+	for (int i = 0; i < 3; i++)
+		d[i] = this->direction[i];
+	return d;
+}
+
+void Object::setDirection(GLfloat _direction[3]) {
+	for (int i = 0; i < 3; i++)
+		this->direction[i] = _direction[i];
+}

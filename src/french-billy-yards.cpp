@@ -40,9 +40,6 @@ Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
 
 Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 
-//Cylinder for Cue stick
-GLUquadric* quadricObj = gluNewQuadric();
-
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
 int width, height;
@@ -88,25 +85,8 @@ void inicializacao() {
 	//alterne e altere as projecoes para alcancar os resultados desejados
 	glFrustum(-1, 1, -1, 1, 1.5, 20.0);
 
-	//cue stick
-	gluQuadricNormals(quadricObj, GLU_SMOOTH);
-
-}
-
-void drawCue() {
-	//TODO: create class
-	//TODO: cue stick has no "lids"
-	glPushMatrix();
-
-	GLfloat cueColor[4] = {0.4, 0.2, 0.0, 1.0};
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, cueColor);
-
-	glRotatef(45, 0, 1, 0);
-	glTranslatef(0, BALL_RADIUS, BALL_RADIUS + 0.1);
-	//gluCylinder(quadricObj, 0.042, 0.084, 5.0, 50, 20);
-	gluCylinder(quadricObj, 0.021, 0.042, 5.35, 50, 20);
-
-	glPopMatrix();
+	//alters cue force TODO: dynamically
+	cue.setForce(0.25);
 }
 
 void funcaoDisplay() {
@@ -123,7 +103,6 @@ void funcaoDisplay() {
 	whiteBall.draw();
 	redBall.draw();
 	yellowBall.draw();
-	//drawCue();
 	cue.draw();
 
 	glFlush();
@@ -153,6 +132,11 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 	if(key == 'i')
 		camera_eye[2] -= 0.1;
 
+	//cue controls
+	if (key == ' ')
+		cue.shoot();
+
+
 	glutPostRedisplay();
 }
 
@@ -164,10 +148,6 @@ void temporizador() {
 		glutPostRedisplay();
 		t = 0;
 	}
-}
-
-void cleanup() {
-	gluDeleteQuadric(quadricObj);
 }
 
 int main(int argc, char **argv) {
@@ -184,8 +164,6 @@ int main(int argc, char **argv) {
 	inicializacao();
 
 	glutMainLoop();
-
-	cleanup();
 
 	return 0;
 }

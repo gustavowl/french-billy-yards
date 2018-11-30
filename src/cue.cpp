@@ -9,16 +9,18 @@ bool Cue::checkCollision(Object* obj) {
 }
 
 void Cue:: draw() {
-	glPushMatrix();
+	if (this->visible) {
+		glPushMatrix();
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);
 		//TODO: calculate rotation vector
 		glRotatef(this->angle, 0, 1, 0);
-		glTranslatef(0, ball->getRadius(), ball->getRadius() + this->force * 0.1);
+		glTranslatef(0, ball->getRadius(), ball->getRadius() + this->force);
 
 		gluCylinder(this->qobj, this->baseRadius, this->topRadius, this->height,
 				this->slices, this->stacks);
 
-	glPopMatrix();
+		glPopMatrix();
+	}
 }
 
 //constructors and destructors
@@ -29,6 +31,7 @@ Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _he
 		this->color[i] = _color[i];
 
 	this->qobj = gluNewQuadric();
+	gluQuadricNormals(this->qobj, GLU_SMOOTH);
 	this->baseRadius = _baseRadius;
 	this->topRadius = _topRadius;
 	this->height = _height;
@@ -86,8 +89,13 @@ void Cue::setTarget(GLfloat _target[3]) {
 		this->target[i] = _target[i];
 }
 //moves cue ball and cue stick disappears
-void shoot() {
+void Cue::shoot() {
 	//TODO: calculate lots of stuff
+	//TODO: calculate mass and acceleration
+	//TODO: calculate shot direction
+	GLfloat dir[3] = {0, 0, -1};
+	this->ball->setDirection(dir);
+	this->ball->setSpeed(this->force);	
 }
 
 //Overrides operators
