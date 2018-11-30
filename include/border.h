@@ -9,12 +9,13 @@ class Border : public Object {
 private:
 	GLfloat color[3];
 	GLfloat length; //along x-axis
+	GLfloat height; //along y-axis
 	GLfloat width; //along z-axis
 
 public:
 	Border();
-	Border(GLfloat _color[3], GLfloat _position[3],
-			GLfloat _length, GLfloat _width);
+	Border(GLfloat _color[3], GLfloat _position[3],	GLfloat _length,
+			GLfloat _height, GLfloat _width);
 
 	void move() override;
 	//TODO: check neutrino effect?

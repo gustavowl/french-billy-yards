@@ -1,29 +1,13 @@
-/*private:
-	GLfloat color[3];
-	GLfloat length; //along x-axis
-	GLfloat width; //along z-axis
-
-public:
-	Border();
-	Border(GLfloat _color[3], GLfloat _position[3],
-			GLfloat _length, GLfloat _width);
-
-	void move() override;
-	//TODO: check neutrino effect?
-	bool checkCollision(Object* obj) override;
-	void draw() override;
-
-	//Overrides operators
-	void operator=(const Border &border);
-*/
-
 #include "border.h"
 
 Border::Border() {
+	GLfloat c[3] = {0, 0, 0};
+	GLfloat p[3] = {0, 0, 0};
+	*this = Border(c, p, 1, 1, 1);
 }
 
-Border::Border(GLfloat _color[3], GLfloat _position[3],
-			GLfloat _length, GLfloat _width) {
+Border::Border(GLfloat _color[3], GLfloat _position[3], GLfloat _length,
+		GLfloat _height, GLfloat _width) {
 
 	object(_position);
 	//copies parameters (not reference)
@@ -33,6 +17,7 @@ Border::Border(GLfloat _color[3], GLfloat _position[3],
 	}
 
 	this->length = _length;
+	this->height = _height;
 	this->width = _width;
 }
 
@@ -58,5 +43,6 @@ void Border::operator=(const Border &border) {
 	}
 
 	this->length = border.length;
+	this->height = border.height;
 	this->width = border.width;
 }
