@@ -71,6 +71,7 @@ bool Cue::getVisible() {
 }
 
 void Cue::setAngle(GLfloat _angle) {
+	//TODO: calculate target or direction (WATCH OUT: avoid recursion)
 	while (_angle >= 360)
 		_angle -= 360;
 	while (_angle < 0)
@@ -84,7 +85,7 @@ GLfloat Cue::getAngle() {
 }
 
 void Cue::setTarget(GLfloat _target[3]) {
-	//TODO: calculate angle
+	//TODO: calculate angle (WATCH OUT: avoid recursion)
 	for (int i = 0; i < 3; i++)
 		this->target[i] = _target[i];
 }

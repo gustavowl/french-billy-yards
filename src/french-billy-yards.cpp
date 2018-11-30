@@ -85,8 +85,11 @@ void inicializacao() {
 	//alterne e altere as projecoes para alcancar os resultados desejados
 	glFrustum(-1, 1, -1, 1, 1.5, 20.0);
 
+	//back-facing culling
+	glEnable(GL_CULL_FACE);
+
 	//alters cue force TODO: dynamically
-	cue.setForce(0.25);
+	cue.setForce(0.2);
 }
 
 void funcaoDisplay() {
@@ -111,7 +114,7 @@ void funcaoDisplay() {
 
 void funcaoKeyboard(unsigned char key, int x, int y) {
 
-	if(key == 'q')
+	if(key == 'q' || key == 'Q')
 		exit(-1);
 
 	//go left and right
@@ -135,6 +138,10 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 	//cue controls
 	if (key == ' ')
 		cue.shoot();
+	if (key == 'A' || key == 'S')
+		cue.setAngle(cue.getAngle() - 1); //rotate clockwise
+	if (key == 'D' || key == 'W')
+		cue.setAngle(cue.getAngle() + 1); //rotate anti-clockwise
 
 
 	glutPostRedisplay();
@@ -144,6 +151,7 @@ int t = 0;
 
 void temporizador() {
 	t++;
+	//if (t == 2112 * 10) {
 	if (t == 2112 * 73) {
 		glutPostRedisplay();
 		t = 0;

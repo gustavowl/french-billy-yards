@@ -53,7 +53,7 @@ void Ball::draw() {
 	this->move();
 
 	glPushMatrix();
-
+	//glCullFace(GL_BACK);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);
 	glTranslatef(this->position[0], this->position[1], this->position[2]);
 	glutSolidSphere(this->radius, this->linesOfLongitude, this->linesOfLongitude);
