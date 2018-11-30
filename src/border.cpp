@@ -29,7 +29,12 @@ bool Border::checkCollision(Object* obj) {
 }
 
 void Border::draw() {
-
+	glPushMatrix();
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->color);
+	glTranslatef(this->position[0], this->position[1], this->position[2]);
+	glScalef(this->length, this->height, this->width);
+	glutSolidCube(1);
+	glPopMatrix();
 }
 
 //Operators

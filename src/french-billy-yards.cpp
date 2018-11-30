@@ -4,11 +4,15 @@
 #include <time.h>
 #include <math.h>
 #include "ball.h"
+#include "table.h"
 
 #define PI 3.1415926535897932
 //#define BALL_RADIUS 0.2165492957746479
 #define BALL_RADIUS 0.217
-#define CM 0.035
+#define CM 0.035 //centimeters
+
+#define TABLEWIDTH 5
+#define TABLELENGTH 10
 
 double camera_eye[3] = {0, 8, 1};
 double radius = 5.5;
@@ -17,17 +21,21 @@ int angle_xz = 0, angle_y = 0;
 GLfloat colorWhite[3] = {1, 1, 1};
 GLfloat colorRed[3] = {1, 0, 0};
 GLfloat colorYellow[3] = {1, 1, 0};
-GLfloat planeColor[4] = {0, 0.1, 0, 1};
+GLfloat colorTable[4] = {0, 0.1, 0, 1};
 
 GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
 
 GLfloat posWhite[3] = {0, BALL_RADIUS, 0};
 GLfloat posRed[3] = {1, BALL_RADIUS, 1.5};
 GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};
+GLfloat posTable[3] = {0, 0, 0};
 
 Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
 	 redBall(colorRed, posRed, BALL_RADIUS),
 	 yellowBall(colorYellow, posYellow, BALL_RADIUS);
+
+Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
+
 
 //Cylinder for Cue stick
 GLUquadric* quadricObj = gluNewQuadric();
@@ -82,45 +90,6 @@ void inicializacao() {
 
 }
 
-void drawTable() {
-	glPushMatrix();
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, planeColor);
-	glScalef(10, 0.2, 5);
-	glTranslatef(0, -0.5, 0);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	//Generate borders
-	//Top
-	glPushMatrix();
-	glTranslatef(0, BALL_RADIUS, - 2.5 - BALL_RADIUS);
-	glScalef(10 + BALL_RADIUS * 4, BALL_RADIUS * 2, BALL_RADIUS * 2);
-	glutSolidCube(1);
-	glPopMatrix();
-	
-	//Bottom
-	glPushMatrix();
-	glTranslatef(0, BALL_RADIUS, 2.5 + BALL_RADIUS);
-	glScalef(10 + BALL_RADIUS * 4, BALL_RADIUS * 2, BALL_RADIUS * 2);
-	glutSolidCube(1);
-	glPopMatrix();
-
-	//Right
-	glPushMatrix();
-	glTranslatef(5 + BALL_RADIUS, BALL_RADIUS, 0);
-	glScalef(BALL_RADIUS * 2, BALL_RADIUS * 2, 5);
-	glutSolidCube(1);
-	glPopMatrix();
-	
-	//Left
-	glPushMatrix();
-	glTranslatef(-5 - BALL_RADIUS, BALL_RADIUS, 0);
-	glScalef(BALL_RADIUS * 2, BALL_RADIUS * 2, 5);
-	glutSolidCube(1);
-	glPopMatrix();
-
-}
-
 void drawCue() {
 	//TODO: create class
 	//TODO: cue stick has no "lids"
@@ -147,7 +116,7 @@ void funcaoDisplay() {
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
 	
-	drawTable();	
+	table.draw();
 	whiteBall.draw();
 	redBall.draw();
 	yellowBall.draw();
