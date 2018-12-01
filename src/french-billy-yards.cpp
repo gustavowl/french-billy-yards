@@ -102,6 +102,23 @@ void inicializacao() {
 }
 
 void moveObjects() {
+	//computes collisions
+	for (unsigned int i = 0; i < objs.size(); i++) {
+		
+		if (objs[i] == &cue)
+			continue; //cue is not interacting with any object.
+			//TODO: check collision during shot animation
+
+		for (unsigned int j = 0; j < objs.size(); j++) {
+			if (objs[j] == &table || objs[j] == &cue)
+				continue; //table and cue do not move
+
+			//i will change j direction if collision happened
+			objs[i]->interact(objs[j]);
+		}
+	}
+
+	//Moves objects
 	ballsMoving = false;
 
 	for (unsigned int i = 0; i < objs.size(); i++) {

@@ -26,8 +26,18 @@ public:
 	GLfloat getRadius();
 
 	void move() override;
+
+	//returns *this' point closest to the *obj's centre
+	//REMEMBER: remember to dealocate memory (delete[])
+	virtual GLfloat* getClosestPoint(Object* obj) override;
+
 	//TODO; check Neutrino effect?
 	bool checkCollision(Object* obj) override;
+
+	//interacts with *obj. Responsible for detecting collision and calculating
+	//*obj's direction vector according to *this collision behaviour
+	virtual void interact(Object* obj) override;
+
 
 	void draw() override;
 

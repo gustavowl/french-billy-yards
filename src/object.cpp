@@ -19,6 +19,7 @@ void Object::object(const GLfloat _position[3], const GLfloat _speed,
 	}
 
 	this->speed = _speed;
+	this->collisionRadius = 0.f;
 
 	for (int i = 0; i < 3; i++) {
 		this->direction[i] = _direction[i];
@@ -50,4 +51,8 @@ GLfloat* Object::getDirection() {
 void Object::setDirection(GLfloat _direction[3]) {
 	for (int i = 0; i < 3; i++)
 		this->direction[i] = _direction[i];
+}
+
+GLfloat Object::getCollisionRadius() {
+	return this->collisionRadius;
 }

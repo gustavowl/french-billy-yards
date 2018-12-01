@@ -24,8 +24,120 @@ Border::Border(GLfloat _color[3], GLfloat _position[3], GLfloat _length,
 void Border::move() {
 }
 
+GLfloat* Border::getClosestPoint(Object* obj) {
+	//x-axis: left(-) to right(+). z-axis: top(-) to bottom(+)
+	GLfloat* ret = new GLfloat[3];
+
+	GLfloat* objPos = obj->getPosition();
+
+	ret[1] = this->position[1];
+	RelativePosition rel = this->getRelativePosition(objPos);
+	switch (rel) {
+		case RelativePosition::NORTH:
+			ret[0] = objPos[0];
+			ret[2] = this->position[2] - this->width / 2;
+			break;
+		case RelativePosition::SOUTH:
+			ret[0] = objPos[0];
+			ret[2] = this->position[2] + this->width / 2;
+			break;
+		case RelativePosition::EAST:
+			ret[0] = this->position[0] + this->length / 2;
+			ret[2] = objPos[2];
+			break;
+		case RelativePosition::WEST:
+			ret[0] = this->position[0] - this->length / 2;
+			ret[2] = objPos[2];
+			break;
+		default: //INVALID
+			delete[] ret;
+			delete[] objPos;
+			return NULL;
+	}
+
+	delete[] objPos;
+	return ret;
+}
+
 bool Border::checkCollision(Object* obj) {
-	return false;
+	bool ret = false;
+	GLfloat* closestPoint = this->getClosestPoint(obj);
+
+	if (closestPoint != NULL) {
+		GLfloat* objPos = obj->getPosition();
+		RelativePosition rel = this->getRelativePosition(objPos);
+
+		switch (rel) {
+			case RelativePosition::NORTH:
+				if (closestPoint[2] < objPos[2] + obj->getCollisionRadius())
+					ret = true;
+				break;
+			case RelativePosition::SOUTH:
+				if (closestPoint[2] > objPos[2] - obj->getCollisionRadius())
+					ret = true;
+				break;
+			case RelativePosition::EAST:
+				if (closestPoint[0] > objPos[0] - obj->getCollisionRadius())
+					ret = true;
+				break;
+			case RelativePosition::WEST:
+				if (closestPoint[0] < objPos[0] + obj->getCollisionRadius())
+					ret = true;
+				break;
+			default: //INVALID
+				break;
+		}
+
+		delete[] objPos;
+		delete[] closestPoint;
+	}
+
+	return ret;
+}
+
+void Border::interact(Object *obj) {
+	if (this->checkCollision(obj)) {
+		GLfloat* objPos = obj->getPosition();
+		RelativePosition rel = this->getRelativePosition(objPos);
+		delete[] objPos;
+
+		//change obj's direction
+		GLfloat* objDir = obj->getDirection();
+
+		if (rel == RelativePosition::NORTH || rel == RelativePosition::SOUTH) {
+			//mirros z-axis
+			objDir[2] *= -1;
+			obj->setDirection(objDir);
+		}
+		//EAST and WEST
+		else if (rel != RelativePosition::INVALID) {
+			//mirros x-axis
+			objDir[0] *= -1;
+			obj->setDirection(objDir);
+		}
+		//else: no action
+
+		delete[] objDir;
+
+	}
+}
+
+//priority: north, east, south, west
+Border::RelativePosition Border::getRelativePosition(GLfloat _position[3]) {
+	//x-axis: left(-) to right(+). z-axis: top(-) to bottom(+)
+	if (_position[2] < this->position[2])
+		return RelativePosition::NORTH;
+
+	if (_position[0] > this->position[0])
+		return RelativePosition::EAST;
+
+	if (_position[2] > this->position[2])
+		return RelativePosition::SOUTH;
+
+	if (_position[0] < this->position[0])
+		return RelativePosition::WEST;
+
+	return RelativePosition::INVALID;
 }
 
 void Border::draw() {

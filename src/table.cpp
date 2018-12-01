@@ -59,8 +59,18 @@ Table::Table(GLfloat _color[3], GLfloat _position[3], GLfloat _borderThickness,
 void Table::move() {
 }
 
+GLfloat* Table::getClosestPoint(Object* obj) {
+	GLfloat* g = new GLfloat(5.f);
+	return g;
+}
+
 bool Table::checkCollision(Object* obj) {
 	return false;
+}
+
+void Table::interact(Object *obj) {
+	for (int i = 0; i < 4; i++)
+		this->borders[i].interact(obj);
 }
 
 void Table::draw() {

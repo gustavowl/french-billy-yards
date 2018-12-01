@@ -22,6 +22,7 @@ Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
 	}
 
 	this->radius = _radius;
+	this->collisionRadius = _radius;
 	this->linesOfLongitude = _longitude;
 	this->linesOfLatitude = _latitude;
 	this->friction = _friction;
@@ -49,8 +50,16 @@ void Ball::move() {
 	}
 }
 
+GLfloat* Ball::getClosestPoint(Object* obj) {
+	GLfloat* a = new GLfloat(5.f);
+	return a;
+}
+
 bool Ball::checkCollision(Object* obj) {
 	return false;
+}
+
+void Ball::interact(Object *obj) {
 }
 
 void Ball::draw() {
@@ -78,5 +87,6 @@ void Ball::operator=(const Ball &ball) {
 	this->linesOfLongitude = ball.linesOfLongitude;
 	this->linesOfLatitude = ball.linesOfLatitude;
 	this->friction = ball.friction;
+	this->collisionRadius = ball.collisionRadius;
 	
 }

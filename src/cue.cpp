@@ -7,9 +7,16 @@ void Cue::move() {
 	delete[] ballPos;
 }
 
-//TODO: check neutrino effect?
+GLfloat* Cue::getClosestPoint(Object* obj) {
+	GLfloat* a = new GLfloat(5.f);
+	return a;
+}
+
 bool Cue::checkCollision(Object* obj) {
 	return false;
+}
+
+void Cue::interact(Object *obj) {
 }
 
 void Cue:: draw() {
