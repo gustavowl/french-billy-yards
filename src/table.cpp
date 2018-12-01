@@ -69,8 +69,14 @@ bool Table::checkCollision(Object* obj) {
 }
 
 void Table::interact(Object *obj) {
-	for (int i = 0; i < 4; i++)
+	printf("======================================\n");
+	for (int i = 0; i < 4; i++) {
+		//DELETE ME
+		//DELETE STDIO from object.h
+		printf("-----Border %d-----\n", i);
 		this->borders[i].interact(obj);
+	}
+	printf("======================================\n\n");
 }
 
 void Table::draw() {
@@ -83,8 +89,9 @@ void Table::draw() {
 	glPopMatrix();
 	
 	//draw borders
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) 
 		this->borders[i].draw();
+
 }
 
 void Table::operator=(const Table &table) {

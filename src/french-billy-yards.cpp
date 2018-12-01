@@ -46,8 +46,8 @@ Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 
 bool ballsMoving = false; //draws cue only if all balss stopped moving
 
-std::vector<Object*> objs = {&table, &whiteBall, &redBall,
-	&yellowBall, &cue};
+std::vector<Object*> objs = {&table, &whiteBall, /*&redBall,
+	&yellowBall,*/ &cue};
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
