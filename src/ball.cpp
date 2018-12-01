@@ -8,11 +8,11 @@ Ball::Ball() {
 }
 
 Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius) {
-	*this = Ball(_color, _position, _radius, 100, 100);
+	*this = Ball(_color, _position, _radius, 100, 100, 0.01);
 }
 
 Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
-		GLint _longitude, GLint _latitude) {
+		GLint _longitude, GLint _latitude, GLfloat _friction) {
 
 	object(_position);
 	//copies parameters (not reference)
@@ -24,6 +24,7 @@ Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
 	this->radius = _radius;
 	this->linesOfLongitude = _longitude;
 	this->linesOfLatitude = _latitude;
+	this->friction = _friction;
 }
 
 //gets and sets
@@ -38,10 +39,13 @@ GLfloat Ball::getRadius() {
 
 void Ball::move() {
 	//TODO: floating-point error
-	if (this->speed != 0) {
+	if (this->speed > 0) {
 		for (int i = 0; i < 3; i++) {
 			this->position[i] += this->direction[i] * this->speed;
 		}
+		this->speed -= this->friction;
+		if (this->speed < 0)
+			this-> speed = 0;
 	}
 }
 
@@ -75,5 +79,6 @@ void Ball::operator=(const Ball &ball) {
 	this->radius = ball.radius;
 	this->linesOfLongitude = ball.linesOfLongitude;
 	this->linesOfLatitude = ball.linesOfLatitude;
+	this->friction = ball.friction;
 	
 }

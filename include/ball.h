@@ -12,12 +12,14 @@ private:
 	GLint linesOfLongitude;
 	GLint linesOfLatitude;
 
+	GLfloat friction; //speed decrease: speed -= friction
+
 public:
 	//Constructors
 	Ball();
 	Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius);
 	Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,
-			GLint _longitude, GLint _latitude);
+			GLint _longitude, GLint _latitude, GLfloat _friction);
 
 	//sets and gets
 	void setRadius(GLfloat _radius);
