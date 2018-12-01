@@ -8,7 +8,7 @@ Ball::Ball() {
 }
 
 Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius) {
-	*this = Ball(_color, _position, _radius, 100, 100, 0.01);
+	*this = Ball(_color, _position, _radius, 100, 100, 0.001);
 }
 
 Ball::Ball(GLfloat _color[3], GLfloat _position[3], GLfloat _radius,

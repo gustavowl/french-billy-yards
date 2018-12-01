@@ -69,14 +69,8 @@ bool Table::checkCollision(Object* obj) {
 }
 
 void Table::interact(Object *obj) {
-	printf("======================================\n");
-	for (int i = 0; i < 4; i++) {
-		//DELETE ME
-		//DELETE STDIO from object.h
-		printf("-----Border %d-----\n", i);
+	for (int i = 0; i < 4; i++)
 		this->borders[i].interact(obj);
-	}
-	printf("======================================\n\n");
 }
 
 void Table::draw() {

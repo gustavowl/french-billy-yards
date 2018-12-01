@@ -46,8 +46,8 @@ Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 
 bool ballsMoving = false; //draws cue only if all balss stopped moving
 
-std::vector<Object*> objs = {&table, &whiteBall, /*&redBall,
-	&yellowBall,*/ &cue};
+std::vector<Object*> objs = {&table, &whiteBall, &redBall,
+	&yellowBall, &cue};
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
@@ -98,7 +98,8 @@ void inicializacao() {
 	glEnable(GL_CULL_FACE);
 
 	//alters cue force TODO: dynamically
-	cue.setForce(0.2);
+	cue.setForce(0.25); //max
+	//cue.setForce(0.05); //min
 }
 
 void moveObjects() {
@@ -197,8 +198,8 @@ int t = 0;
 
 void temporizador() {
 	t++;
-	//if (t == 2112 * 10) {
-	if (t == 2112 * 73) {
+	if (t == 2112 * 10) {
+	//if (t == 2112 * 73) {
 		glutPostRedisplay();
 		t = 0;
 	}
