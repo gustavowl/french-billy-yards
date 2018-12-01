@@ -1,6 +1,10 @@
 #include "cue.h"
 
 void Cue::move() {
+	GLfloat* ballPos = this->ball->getPosition();
+	for (int i = 0; i < 3; i++)
+		this->position[i] = ballPos[i];
+	delete[] ballPos;
 }
 
 //TODO: check neutrino effect?
@@ -9,16 +13,12 @@ bool Cue::checkCollision(Object* obj) {
 }
 
 void Cue:: draw() {
+	this->setVisible(true); //remain invisible while cue ball is moving
 	if (this->visible) {
 		glPushMatrix();
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);
 
-		GLfloat* ballPos = this->ball->getPosition();
-		for (int i = 0; i < 3; i++)
-			this->position[i] = ballPos[i];
-		delete[] ballPos;
-
-		//TODO: calculate rotation vector
+		//TODO: calculate rotation vector (along y-axis)
 		glTranslatef(this->position[0], ball->getRadius(), this->position[2]);
 		glRotatef(this->angle, 0, 1, 0);
 		glTranslatef(0, 0, ball->getRadius() + this->force);
@@ -56,7 +56,9 @@ Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _he
 	this->stacks = _stacks;
 
 	this->ball = _ball;
+	this->move();
 	this->setAngle(0.f);
+
 	GLfloat* ballPos = this->ball->getPosition();
 	for (int i = 0; i < 3; i++)
 		this->target[i] = ballPos[i] + this->direction[i];
@@ -141,8 +143,10 @@ void Cue::operator=(const Cue &cue) {
 	this->ball = cue.ball; 
 
 	this->angle = cue.angle;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++) {
+		this->direction[i] = cue.direction[i];
 		this->target[i] = cue.target[i];
+	}
 
 	this->visible = cue.visible;
 	this->force = cue.force;

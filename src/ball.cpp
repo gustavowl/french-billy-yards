@@ -54,8 +54,6 @@ bool Ball::checkCollision(Object* obj) {
 }
 
 void Ball::draw() {
-	this->move();
-
 	glPushMatrix();
 	//glCullFace(GL_BACK);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);

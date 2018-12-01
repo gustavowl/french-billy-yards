@@ -94,6 +94,21 @@ void inicializacao() {
 	cue.setForce(0.2);
 }
 
+void moveObjects() {
+	whiteBall.move();
+	redBall.move();
+	yellowBall.move();
+	cue.move();
+}
+
+void drawObjects() {
+	table.draw();
+	whiteBall.draw();
+	redBall.draw();
+	yellowBall.draw();
+	cue.draw();
+}
+
 void funcaoDisplay() {
 	//limpa a tela com a cor de fundo
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -103,12 +118,9 @@ void funcaoDisplay() {
 
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
-	
-	table.draw();
-	whiteBall.draw();
-	redBall.draw();
-	yellowBall.draw();
-	cue.draw();
+
+	moveObjects();
+	drawObjects();
 
 	glFlush();
 	glutSwapBuffers();
@@ -119,30 +131,30 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 		exit(-1);
 
 	//go left and right
-	else if(key == 'd')
+	else if(key == 'D')
 		camera_eye[0] += 0.1;
-	else if(key == 'a')
+	else if(key == 'A')
 		camera_eye[0] -= 0.1;
 
 	//go up and down
-	else if(key == 'w')
+	else if(key == 'W')
 		camera_eye[1] += 0.1;
-	else if(key == 's')
+	else if(key == 'S')
 		camera_eye[1] -= 0.1;
 
 	//go back and forward
-	else if(key == 'k')
+	else if(key == 'K')
 		camera_eye[2] += 0.1;
-	else if(key == 'i')
+	else if(key == 'I')
 		camera_eye[2] -= 0.1;
 
 	//cue controls
 	else if (cue.getVisible()) {
 		if (key == ' ')
 			cue.shoot();
-		else if (key == 'A' || key == 'S')
+		else if (key == 'a' || key == 's')
 			cue.setAngle(cue.getAngle() - 1); //rotate clockwise
-		else if (key == 'D' || key == 'W')
+		else if (key == 'd' || key == 'w')
 			cue.setAngle(cue.getAngle() + 1); //rotate anti-clockwise
 		else //no valid action
 			return;
