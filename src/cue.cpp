@@ -12,9 +12,16 @@ void Cue:: draw() {
 	if (this->visible) {
 		glPushMatrix();
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);
+
+		GLfloat* ballPos = this->ball->getPosition();
+		for (int i = 0; i < 3; i++)
+			this->position[i] = ballPos[i];
+		delete[] ballPos;
+
 		//TODO: calculate rotation vector
+		glTranslatef(this->position[0], ball->getRadius(), this->position[2]);
 		glRotatef(this->angle, 0, 1, 0);
-		glTranslatef(0, ball->getRadius(), ball->getRadius() + this->force);
+		glTranslatef(0, 0, ball->getRadius() + this->force);
 
 		gluCylinder(this->qobj, this->baseRadius, this->topRadius, this->height,
 				this->slices, this->stacks);
@@ -35,6 +42,7 @@ void Cue::setDirection(GLfloat _angle) {
 //constructors and destructors
 Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _height,
 		GLfloat _slices, GLfloat _stacks, Ball* _ball) {
+	object();
 
 	for (int i = 0; i < 3; i++)
 		this->color[i] = _color[i];
@@ -52,7 +60,6 @@ Cue::Cue(GLfloat _color[3], GLfloat _baseRadius, GLfloat _topRadius, GLfloat _he
 	GLfloat* ballPos = this->ball->getPosition();
 	for (int i = 0; i < 3; i++)
 		this->target[i] = ballPos[i] + this->direction[i];
-	
 	delete[] ballPos;
 
 	visible = true;
@@ -73,7 +80,10 @@ GLfloat Cue::getForce() {
 }
 
 void Cue::setVisible(bool _visible) {
-	this->visible = _visible;
+	if (_visible && this->ball->getSpeed() == 0.f)
+		this->visible = true;
+	else
+		this->visible = false;
 }
 
 bool Cue::getVisible() {
@@ -106,7 +116,8 @@ void Cue::shoot() {
 	//TODO: calculate mass and acceleration
 	//TODO: calculate shot direction
 	this->ball->setDirection(this->direction);
-	this->ball->setSpeed(this->force);	
+	this->ball->setSpeed(this->force);
+	this->visible = false;
 }
 
 //Overrides operators
