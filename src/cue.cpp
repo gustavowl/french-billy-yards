@@ -115,9 +115,11 @@ void Cue::shoot() {
 	//TODO: calculate lots of stuff
 	//TODO: calculate mass and acceleration
 	//TODO: calculate shot direction
-	this->ball->setDirection(this->direction);
-	this->ball->setSpeed(this->force);
-	this->visible = false;
+	if (this->visible) {
+		this->ball->setDirection(this->direction);
+		this->ball->setSpeed(this->force);
+		this->visible = false;
+	}
 }
 
 //Overrides operators

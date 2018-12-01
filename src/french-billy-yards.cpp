@@ -115,36 +115,41 @@ void funcaoDisplay() {
 }
 
 void funcaoKeyboard(unsigned char key, int x, int y) {
-
 	if(key == 'q' || key == 'Q')
 		exit(-1);
 
 	//go left and right
-	if(key == 'd')
+	else if(key == 'd')
 		camera_eye[0] += 0.1;
-	if(key == 'a')
+	else if(key == 'a')
 		camera_eye[0] -= 0.1;
 
 	//go up and down
-	if(key == 'w')
+	else if(key == 'w')
 		camera_eye[1] += 0.1;
-	if(key == 's')
+	else if(key == 's')
 		camera_eye[1] -= 0.1;
 
 	//go back and forward
-	if(key == 'k')
+	else if(key == 'k')
 		camera_eye[2] += 0.1;
-	if(key == 'i')
+	else if(key == 'i')
 		camera_eye[2] -= 0.1;
 
 	//cue controls
-	if (key == ' ')
-		cue.shoot();
-	if (key == 'A' || key == 'S')
-		cue.setAngle(cue.getAngle() - 1); //rotate clockwise
-	if (key == 'D' || key == 'W')
-		cue.setAngle(cue.getAngle() + 1); //rotate anti-clockwise
+	else if (cue.getVisible()) {
+		if (key == ' ')
+			cue.shoot();
+		else if (key == 'A' || key == 'S')
+			cue.setAngle(cue.getAngle() - 1); //rotate clockwise
+		else if (key == 'D' || key == 'W')
+			cue.setAngle(cue.getAngle() + 1); //rotate anti-clockwise
+		else //no valid action
+			return;
+	}
 
+	else //cue invisible
+		return;
 
 	glutPostRedisplay();
 }
