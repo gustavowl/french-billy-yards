@@ -13,7 +13,6 @@ bool Cue::checkCollision(Object* obj) {
 }
 
 void Cue:: draw() {
-	this->setVisible(true); //remain invisible while cue ball is moving
 	if (this->visible) {
 		glPushMatrix();
 		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, this->color);

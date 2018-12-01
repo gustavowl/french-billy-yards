@@ -42,6 +42,8 @@ Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
 
 Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 
+bool ballsMoving = false; //draws cue only if all balss stopped moving
+
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
 int width, height;
@@ -98,6 +100,13 @@ void moveObjects() {
 	whiteBall.move();
 	redBall.move();
 	yellowBall.move();
+
+	if (whiteBall.getSpeed() != 0 || redBall.getSpeed() != 0 ||
+			yellowBall.getSpeed() != 0)
+		ballsMoving = true;
+	else
+		ballsMoving = false;
+
 	cue.move();
 }
 
@@ -106,7 +115,10 @@ void drawObjects() {
 	whiteBall.draw();
 	redBall.draw();
 	yellowBall.draw();
-	cue.draw();
+	if (!ballsMoving) {
+		cue.setVisible(true);
+		cue.draw();
+	}
 }
 
 void funcaoDisplay() {
