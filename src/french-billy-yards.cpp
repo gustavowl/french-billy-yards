@@ -3,9 +3,11 @@
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
+#include "object.h"
 #include "ball.h"
 #include "table.h"
 #include "cue.h"
+#include <vector>
 
 #ifndef PI
 	#define PI 3.1415926535897932
@@ -43,6 +45,9 @@ Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
 Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 
 bool ballsMoving = false; //draws cue only if all balss stopped moving
+
+std::vector<Object*> objs = {&table, &whiteBall, &redBall,
+	&yellowBall, &cue};
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
 unsigned char* data;
@@ -97,27 +102,20 @@ void inicializacao() {
 }
 
 void moveObjects() {
-	whiteBall.move();
-	redBall.move();
-	yellowBall.move();
+	ballsMoving = false;
 
-	if (whiteBall.getSpeed() != 0 || redBall.getSpeed() != 0 ||
-			yellowBall.getSpeed() != 0)
-		ballsMoving = true;
-	else
-		ballsMoving = false;
+	for (unsigned int i = 0; i < objs.size(); i++) {
+		objs[i]->move();
+		if (!ballsMoving && objs[i]->getSpeed() != 0)
+			ballsMoving = true;
+	}
 
-	cue.move();
+	cue.setVisible(!ballsMoving);
 }
 
 void drawObjects() {
-	table.draw();
-	whiteBall.draw();
-	redBall.draw();
-	yellowBall.draw();
-	if (!ballsMoving) {
-		cue.setVisible(true);
-		cue.draw();
+	for (unsigned int i = 0; i < objs.size(); i++) {
+			objs[i]->draw();
 	}
 }
 
