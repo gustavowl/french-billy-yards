@@ -91,11 +91,15 @@ void Ball::interact(Object *obj) {
 			objDir[i] += collisionVec[i];
 		obj->setDirection(objDir);
 
-		//changes object's speed
-		obj->setSpeed(obj->getSpeed() + this->speed);
+		//changes object's speed depending on collision angle
+		GLfloat cosTheta = this->innerProduct(collisionVec, this->direction) /
+			( sqrt(this->innerProduct(collisionVec, collisionVec) *
+			 this->innerProduct(this->direction, this->direction)) );
+		obj->setSpeed(obj->getSpeed() + this->speed * cosTheta);
 
 		//TODO: DELETE ME - RESET
 		this->position[0] = this->position[2] = 0;
+		this->position[1] = -2;
 		for (int i = 0; i < 3; i++) {
 			printf("this[%d] = %f | ", i, this->direction[i]);
 			this->speed = 0;
@@ -118,6 +122,9 @@ void Ball::draw() {
 	glutSolidSphere(this->radius, this->linesOfLongitude, this->linesOfLongitude);
 	
 	glPopMatrix();
+
+	if (this->speed != 0.f)
+		printf("ite: %d\n", ++(this->ite));
 }
 
 

@@ -17,6 +17,7 @@ protected:
 	GLfloat speed;
 	GLfloat direction[3];
 	GLfloat collisionRadius;
+	int ite = 0; //TODO: DELETE ME
 
 	void object();
 	void object(const GLfloat _position[3]);

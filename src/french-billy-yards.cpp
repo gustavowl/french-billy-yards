@@ -198,8 +198,8 @@ int t = 0;
 
 void temporizador() {
 	t++;
-	//if (t == 2112 * 10) {
-	if (t == 2112 * 500) {
+	if (t == 2112 * 10) {
+	//if (t == 2112 * 500) {
 		glutPostRedisplay();
 		t = 0;
 	}

@@ -38,6 +38,8 @@ GLfloat Object::getSpeed() {
 }
 
 void Object::setSpeed(GLfloat _speed) {
+	printf("DELETE NEXT LINE\n");
+	this->ite = 0;
 	this->speed = _speed;
 }
 
