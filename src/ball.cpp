@@ -45,8 +45,12 @@ void Ball::move() {
 			this->position[i] += this->direction[i] * this->speed;
 		}
 		this->speed -= this->friction;
-		if (this->speed < 0)
-			this-> speed = 0;
+		if (this->speed < 0) {
+			this->speed = 0;
+			this->ite = 0;
+			for (int i = 0; i < 3; i++)
+				this->direction[i] = 0;
+		}
 	}
 }
 
@@ -85,24 +89,42 @@ void Ball::interact(Object *obj) {
 		this->normalizeVector(collisionVec);
 		delete[] objPos;
 
-		//change object's direction
 		GLfloat* objDir = obj->getDirection();
+		//sums direction vectors
+		GLfloat dirSum[3] = {0.f, 0.f, 0.f};
+		for (int i = 0; i < 3; i++)
+			dirSum[i] = this->direction[i] + objDir[i];
+
+
+		//changes object's speed depending on collision angle
+		GLfloat objSpeed = obj->getSpeed();
+		GLfloat theta = acos( this->innerProduct(collisionVec, dirSum) /
+			( sqrt(this->innerProduct(collisionVec, collisionVec) *
+			 this->innerProduct(dirSum, dirSum)) ) );
+		while (theta > PI/2)
+			theta -= PI/2;
+		obj->setSpeed(sin(theta) * objSpeed + cos(theta) * this->speed);
+		printf("----------------------------%f-----------------------------\n", theta * 180.0 / PI);
+		printf("----------------------------%f-----------------------------\n", obj->getSpeed());
+
+		//changes this' speed depending on collision angle
+		this->speed = sin(theta) * this->speed + cos(theta) * objSpeed;
+
+		//change object's direction
 		for (int i = 0; i < 3; i ++)
 			objDir[i] += collisionVec[i];
 		obj->setDirection(objDir);
 
-		//changes object's speed depending on collision angle
-		GLfloat cosTheta = this->innerProduct(collisionVec, this->direction) /
-			( sqrt(this->innerProduct(collisionVec, collisionVec) *
-			 this->innerProduct(this->direction, this->direction)) );
-		obj->setSpeed(obj->getSpeed() + this->speed * cosTheta);
+		//change this direction
+		for (int i = 0; i < 3; i++)
+			this->direction[i] -= collisionVec[i];
 
 		//TODO: DELETE ME - RESET
-		this->position[0] = this->position[2] = 0;
-		this->position[1] = -2;
+		//this->position[0] = this->position[2] = 0;
+		//this->position[1] = -2;
 		for (int i = 0; i < 3; i++) {
 			printf("this[%d] = %f | ", i, this->direction[i]);
-			this->speed = 0;
+			//this->speed = 0;
 		}
 		printf("\n");
 		for (int i = 0; i < 3; i++)
@@ -123,8 +145,10 @@ void Ball::draw() {
 	
 	glPopMatrix();
 
-	if (this->speed != 0.f)
-		printf("ite: %d\n", ++(this->ite));
+	if (this->speed != 0.f) {
+		std::cout << "ite<" << this;
+		printf(">: %d\n", ++(this->ite));
+	}
 }
 
 

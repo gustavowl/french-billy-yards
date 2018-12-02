@@ -33,7 +33,8 @@ GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
 
 GLfloat posWhite[3] = {0, BALL_RADIUS, 0};
 GLfloat posRed[3] = {0, BALL_RADIUS, -1};
-GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};
+//GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};
+GLfloat posYellow[3] = {0, BALL_RADIUS, 1};
 GLfloat posTable[3] = {0, 0, 0};
 
 Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
@@ -43,6 +44,7 @@ Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
 Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
 
 Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
+//Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &yellowBall);
 
 bool ballsMoving = false; //draws cue only if all balss stopped moving
 

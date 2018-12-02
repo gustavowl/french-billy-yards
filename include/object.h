@@ -2,6 +2,7 @@
 #define __OBJECT_H__
 
 #include <stdio.h>
+#include <iostream>
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <math.h>
