@@ -51,15 +51,63 @@ void Ball::move() {
 }
 
 GLfloat* Ball::getClosestPoint(Object* obj) {
-	GLfloat* a = new GLfloat(5.f);
-	return a;
+	GLfloat* objPos = obj->getPosition();
+
+	GLfloat* ret = this->calculateVector(this->position, objPos);
+	this->normalizeVector(ret);
+	
+	//calculates closest surface point
+	for (int i = 0; i < 3; i++)
+		ret[i] = this->position[i] + this->radius * ret[i];
+
+	delete[] objPos;
+	return ret;
 }
 
 bool Ball::checkCollision(Object* obj) {
-	return false;
+	GLfloat* objClosest = obj->getClosestPoint(this);
+	GLfloat* distVec = this->calculateVector(this->position, objClosest);
+	GLfloat distance = sqrt(this->innerProduct(distVec, distVec));
+	delete[] distVec;
+	delete[] objClosest;
+	return distance < this->collisionRadius;
 }
 
 void Ball::interact(Object *obj) {
+	if (this->checkCollision(obj)) {
+		//calculates collision vector (angle)
+		//collisionVec simulates sine and cosine
+		//(EASTER EGG: sine, sine, cosine, sine, 3.14159)
+		GLfloat* objPos = obj->getPosition();
+		//direction of obj will be changed, therefore
+		//collision vector is OBJ - THIS
+		GLfloat* collisionVec = this->calculateVector(this->position, objPos);
+		this->normalizeVector(collisionVec);
+		delete[] objPos;
+
+		//change object's direction
+		GLfloat* objDir = obj->getDirection();
+		for (int i = 0; i < 3; i ++)
+			objDir[i] += collisionVec[i];
+		obj->setDirection(objDir);
+
+		//changes object's speed
+		obj->setSpeed(obj->getSpeed() + this->speed);
+
+		//TODO: DELETE ME - RESET
+		this->position[0] = this->position[2] = 0;
+		for (int i = 0; i < 3; i++) {
+			printf("this[%d] = %f | ", i, this->direction[i]);
+			this->speed = 0;
+		}
+		printf("\n");
+		for (int i = 0; i < 3; i++)
+			printf("obj[%d] = %f | ", i, objDir[i]);
+		printf("\n==========================\n\n");
+		
+		delete[] collisionVec;
+		delete[] objDir;
+	}
 }
 
 void Ball::draw() {

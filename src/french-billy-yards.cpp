@@ -32,7 +32,7 @@ GLfloat colorCue[3] = {0.4, 0.2, 0.0};
 GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
 
 GLfloat posWhite[3] = {0, BALL_RADIUS, 0};
-GLfloat posRed[3] = {1, BALL_RADIUS, 1.5};
+GLfloat posRed[3] = {0, BALL_RADIUS, -1};
 GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};
 GLfloat posTable[3] = {0, 0, 0};
 
@@ -110,8 +110,8 @@ void moveObjects() {
 			continue; //cue is not interacting with any object.
 			//TODO: check collision during shot animation
 
-		for (unsigned int j = 0; j < objs.size(); j++) {
-			if (objs[j] == &table || objs[j] == &cue)
+		for (unsigned int j = i + 1; j < objs.size(); j++) {
+			if (objs[j] == &cue || objs[j] == &table) 
 				continue; //table and cue do not move
 
 			//i will change j direction if collision happened
@@ -198,8 +198,8 @@ int t = 0;
 
 void temporizador() {
 	t++;
-	if (t == 2112 * 10) {
-	//if (t == 2112 * 73) {
+	//if (t == 2112 * 10) {
+	if (t == 2112 * 500) {
 		glutPostRedisplay();
 		t = 0;
 	}

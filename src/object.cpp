@@ -56,3 +56,23 @@ void Object::setDirection(GLfloat _direction[3]) {
 GLfloat Object::getCollisionRadius() {
 	return this->collisionRadius;
 }
+
+GLfloat Object::innerProduct(GLfloat vectora[3], GLfloat vectorb[3]) {
+	GLfloat ip = 0.f;
+	for (int i = 0; i < 3; i++)
+		ip += vectora[i] * vectorb[i];
+	return ip;
+}
+
+GLfloat* Object::calculateVector(GLfloat pointa[3], GLfloat pointb[3]) {
+	GLfloat* ret = new GLfloat[3];
+	for (int i = 0; i < 3; i++)
+		ret[i] = pointb[i] - pointa[i];
+	return ret;
+}
+
+void Object::normalizeVector(GLfloat vec[3]) {
+	GLfloat norm = sqrt(this->innerProduct(vec, vec));
+	for (int i = 0; i < 3; i++)
+		vec[i] /= norm;
+}
