@@ -43,7 +43,7 @@ public:
 
 	GLfloat* getPosition(); //REMEMBER: remember to dealocate memory (delete[])
 	GLfloat getSpeed();
-	void setSpeed(GLfloat _speed);
+	virtual void setSpeed(GLfloat _speed) = 0;
 	GLfloat* getDirection(); //REMEMBER: remember to dealocate memory (delete[])
 	void setDirection(GLfloat _direction[3]);
 	//void setCollisionRadius(GLfloat _radius);

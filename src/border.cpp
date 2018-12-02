@@ -144,6 +144,15 @@ Border::RelativePosition Border::getRelativePosition(GLfloat _position[3]) {
 	return RelativePosition::INVALID;
 }
 
+void Border::setSpeed(GLfloat _speed) {
+	printf("BORDER SET SPEED\n");
+	if (_speed <= 0.f) {
+		this->ite = 0;
+		_speed = 0.f;
+	}
+	this->speed = _speed;
+}
+
 void Border::draw() {
 	glPushMatrix();
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->color);

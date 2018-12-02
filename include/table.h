@@ -32,6 +32,8 @@ public:
 	//*obj's direction vector according to *this collision behaviour
 	virtual void interact(Object* obj) override;
 
+	void setSpeed(GLfloat _speed) override;
+	
 	void draw() override;
 
 	//overrides operator

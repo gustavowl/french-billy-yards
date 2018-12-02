@@ -40,17 +40,12 @@ GLfloat Ball::getRadius() {
 
 void Ball::move() {
 	//TODO: floating-point error
-	if (this->speed > 0) {
+	if (this->speed >= 0.f) {
 		for (int i = 0; i < 3; i++) {
 			this->position[i] += this->direction[i] * this->speed;
 		}
-		this->speed -= this->friction;
-		if (this->speed < 0) {
-			this->speed = 0;
-			this->ite = 0;
-			for (int i = 0; i < 3; i++)
-				this->direction[i] = 0;
-		}
+
+		this->setSpeed(this->speed - friction);
 	}
 }
 
@@ -95,40 +90,57 @@ void Ball::interact(Object *obj) {
 		for (int i = 0; i < 3; i++)
 			dirSum[i] = this->direction[i] + objDir[i];
 
+		printf("\tBEFORE COLLISION\n");
+		for (int i = 0; i < 3; i++) {
+			printf("this[%d] = %f | ", i, this->direction[i]);
+		}
+		printf("speed = %f\n", this->getSpeed());
+		//printf("\n");
+		for (int i = 0; i < 3; i++)
+			printf("obj[%d] = %f | ", i, objDir[i]);
+		printf("speed = %f\n", obj->getSpeed());
 
 		//changes object's speed depending on collision angle
 		GLfloat objSpeed = obj->getSpeed();
 		GLfloat theta = acos( this->innerProduct(collisionVec, dirSum) /
 			( sqrt(this->innerProduct(collisionVec, collisionVec) *
 			 this->innerProduct(dirSum, dirSum)) ) );
-		while (theta > PI/2)
-			theta -= PI/2;
-		obj->setSpeed(sin(theta) * objSpeed + cos(theta) * this->speed);
+		if (theta > PI/2)
+			theta = PI - theta;
+		obj->setSpeed(pow(sin(theta),2) * objSpeed + pow(cos(theta),2) * this->speed);
 		printf("----------------------------%f-----------------------------\n", theta * 180.0 / PI);
 		printf("----------------------------%f-----------------------------\n", obj->getSpeed());
 
 		//changes this' speed depending on collision angle
-		this->speed = sin(theta) * this->speed + cos(theta) * objSpeed;
+		this->setSpeed(pow(sin(theta),2) * this->speed + pow(cos(theta),2) * objSpeed);
 
 		//change object's direction
 		for (int i = 0; i < 3; i ++)
 			objDir[i] += collisionVec[i];
+		//this->normalizeVector(objDir);
 		obj->setDirection(objDir);
 
 		//change this direction
 		for (int i = 0; i < 3; i++)
 			this->direction[i] -= collisionVec[i];
+		//this->normalizeVector(this->direction);
 
 		//TODO: DELETE ME - RESET
 		//this->position[0] = this->position[2] = 0;
 		//this->position[1] = -2;
+		printf("\tAFTER COLLISION\n");
 		for (int i = 0; i < 3; i++) {
 			printf("this[%d] = %f | ", i, this->direction[i]);
-			//this->speed = 0;
 		}
-		printf("\n");
+		printf("speed = %f\n", this->getSpeed());
 		for (int i = 0; i < 3; i++)
 			printf("obj[%d] = %f | ", i, objDir[i]);
+		printf("speed = %f\n", obj->getSpeed());
+		for (int i = 0; i < 3; i++)
+			printf("collisionVec[%d] = %f | ", i, collisionVec[i]);
+		printf("\n");
+		for (int i = 0; i < 3; i++)
+			printf("dirSum[%d] = %f | ", i, dirSum[i]);
 		printf("\n==========================\n\n");
 		
 		delete[] collisionVec;
@@ -151,6 +163,19 @@ void Ball::draw() {
 	}
 }
 
+void Ball::setSpeed(GLfloat _speed) {
+	//printf("BALL SET SPEED\n");
+	if (_speed < 0.f)
+		_speed = 0.f;
+
+	if (_speed == 0.f) {
+		//for (int i = 0; i < 3; i++)
+		//	this->direction[i] = 0.f;
+		this->ite = 0;
+	}
+
+	this->speed = _speed;
+}
 
 //Operators
 

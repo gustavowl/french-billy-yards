@@ -37,11 +37,12 @@ GLfloat Object::getSpeed() {
 	return this->speed;
 }
 
-void Object::setSpeed(GLfloat _speed) {
+/*void Object::setSpeed(GLfloat _speed) {
 	printf("DELETE NEXT LINE\n");
-	this->ite = 0;
+	if (_speed == 0.f)
+		this->ite = 0;
 	this->speed = _speed;
-}
+}*/
 
 GLfloat* Object::getDirection() {
 	GLfloat* d = new GLfloat[3];
@@ -75,6 +76,7 @@ GLfloat* Object::calculateVector(GLfloat pointa[3], GLfloat pointb[3]) {
 
 void Object::normalizeVector(GLfloat vec[3]) {
 	GLfloat norm = sqrt(this->innerProduct(vec, vec));
-	for (int i = 0; i < 3; i++)
-		vec[i] /= norm;
+	if (norm > 0.f)
+		for (int i = 0; i < 3; i++)
+			vec[i] /= norm;
 }
