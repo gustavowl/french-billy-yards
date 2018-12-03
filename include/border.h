@@ -15,7 +15,7 @@ private:
 	enum class RelativePosition {NORTH, EAST, SOUTH, WEST, INVALID};
 
 	//priority order: North, East, South, West, Invalid
-	RelativePosition getRelativePosition(GLfloat _position[3]);
+	RelativePosition getRelativePosition(Object* obj);
 
 public:
 	Border();

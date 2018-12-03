@@ -1,5 +1,4 @@
 #include "ball.h"
-#include <stdio.h>
 
 Ball::Ball() {
 	GLfloat c[3] = {1, 1, 1};
@@ -40,7 +39,7 @@ GLfloat Ball::getRadius() {
 
 void Ball::move() {
 	//TODO: floating-point error
-	if (this->speed >= 0.f) {
+	if (this->speed > 0.f) {
 		for (int i = 0; i < 3; i++) {
 			this->position[i] += this->direction[i] * this->speed;
 		}
@@ -105,6 +104,8 @@ void Ball::interact(Object *obj) {
 		GLfloat theta = acos( this->innerProduct(collisionVec, dirSum) /
 			( sqrt(this->innerProduct(collisionVec, collisionVec) *
 			 this->innerProduct(dirSum, dirSum)) ) );
+		/*GLfloat theta = acos( this->innerProduct(collisionVec, collisionVec) /
+			( this->innerProduct(collisionVec, collisionVec) ));*/
 		if (theta > PI/2)
 			theta = PI - theta;
 		obj->setSpeed(pow(sin(theta),2) * objSpeed + pow(cos(theta),2) * this->speed);
@@ -114,16 +115,22 @@ void Ball::interact(Object *obj) {
 		//changes this' speed depending on collision angle
 		this->setSpeed(pow(sin(theta),2) * this->speed + pow(cos(theta),2) * objSpeed);
 
+		//copies objDir before changing it for future calculations
+		GLfloat copyObjDir[3];
+		for (int i = 0; i < 3; i++)
+			copyObjDir[i] = objDir[i];
+
 		//change object's direction
 		for (int i = 0; i < 3; i ++)
-			objDir[i] += collisionVec[i];
-		//this->normalizeVector(objDir);
+			//objDir[i] += collisionVec[i];
+			objDir[i] += cos(theta) * (-objDir[i]) + cos(theta) * this->direction[i];
+		this->normalizeVector(objDir);
 		obj->setDirection(objDir);
 
 		//change this direction
 		for (int i = 0; i < 3; i++)
-			this->direction[i] -= collisionVec[i];
-		//this->normalizeVector(this->direction);
+			this->direction[i] = cos(theta) * (-this->direction[i]) + cos(theta) * copyObjDir[i];
+		this->normalizeVector(this->direction);
 
 		//TODO: DELETE ME - RESET
 		//this->position[0] = this->position[2] = 0;
@@ -169,8 +176,8 @@ void Ball::setSpeed(GLfloat _speed) {
 		_speed = 0.f;
 
 	if (_speed == 0.f) {
-		//for (int i = 0; i < 3; i++)
-		//	this->direction[i] = 0.f;
+		for (int i = 0; i < 3; i++)
+			this->direction[i] = 0.f;
 		this->ite = 0;
 	}
 

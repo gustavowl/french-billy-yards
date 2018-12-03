@@ -102,7 +102,7 @@ void inicializacao() {
 	glEnable(GL_CULL_FACE);
 
 	//alters cue force TODO: dynamically
-	cue.setForce(0.2); //max
+	cue.setForce(0.5); //max
 	//cue.setForce(0.05); //min
 	cue.setAngle(cue.getAngle() + 27);
 }
@@ -204,8 +204,8 @@ int t = 0;
 void temporizador() {
 	t++;
 	//if (t == 2112) {
-	if (t == 2112 * 15) {
-	//if (t == 2112 * 500) {
+	//if (t == 2112 * 50) {
+	if (t == 2112 * 500) {
 		glutPostRedisplay();
 		t = 0;
 	}

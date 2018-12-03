@@ -31,7 +31,10 @@ GLfloat* Border::getClosestPoint(Object* obj) {
 	GLfloat* objPos = obj->getPosition();
 
 	ret[1] = this->position[1];
-	RelativePosition rel = this->getRelativePosition(objPos);
+	/*for (int i = 0; i < 3; i++)
+		printf("(closest point) objPos: %f ", objPos[i]);*/
+	RelativePosition rel = this->getRelativePosition(obj);
+	//printf("%d\n", (int)rel);
 	switch (rel) {
 		case RelativePosition::NORTH:
 			ret[0] = objPos[0];
@@ -65,31 +68,47 @@ bool Border::checkCollision(Object* obj) {
 
 	if (closestPoint != NULL) {
 		GLfloat* objPos = obj->getPosition();
-		RelativePosition rel = this->getRelativePosition(objPos);
-
+		RelativePosition rel = this->getRelativePosition(obj);
 		switch (rel) {
 			case RelativePosition::NORTH:
-				if (closestPoint[2] <= objPos[2] + obj->getCollisionRadius())
+				if (closestPoint[2] <= objPos[2] + obj->getCollisionRadius()) {
+					printf("NORTH: %f ", closestPoint[2]);
 					ret = true;
+				}
 				break;
 			case RelativePosition::SOUTH:
-				if (closestPoint[2] >= objPos[2] - obj->getCollisionRadius())
+				if (closestPoint[2] >= objPos[2] - obj->getCollisionRadius()) {
+					printf("SOUTH: %f ", closestPoint[2]);
 					ret = true;
+				}
 				break;
 			case RelativePosition::EAST:
-				if (closestPoint[0] >= objPos[0] - obj->getCollisionRadius())
+				if (closestPoint[0] >= objPos[0] - obj->getCollisionRadius()) {
+					printf("EAST: %f ", closestPoint[0]);
 					ret = true;
+				}
 				break;
 			case RelativePosition::WEST:
-				if (closestPoint[0] <= objPos[0] + obj->getCollisionRadius())
+				if (closestPoint[0] <= objPos[0] + obj->getCollisionRadius()) {
+					printf("wEST: %f\n", closestPoint[0]);
 					ret = true;
+				}
 				break;
 			default: //INVALID
+				printf("\nINVALID[x:%f][z:%f] ", closestPoint[0],
+						closestPoint[2]);
 				break;
 		}
 
 		delete[] objPos;
 		delete[] closestPoint;
+
+		if(ret) {
+			printf("enum: %d\t", (int)rel);
+			for (int i = 0; i < 3; i++)
+				printf("pos[%d]=%f | ", i, closestPoint[i]);
+			printf("\n");
+		}
 	}
 
 	return ret;
@@ -97,9 +116,8 @@ bool Border::checkCollision(Object* obj) {
 
 void Border::interact(Object *obj) {
 	if (this->checkCollision(obj)) {
-		GLfloat* objPos = obj->getPosition();
-		RelativePosition rel = this->getRelativePosition(objPos);
-		delete[] objPos;
+		std::cout << "-----obj<" << obj << "> collided with border <" << this << ">-----\n";
+		RelativePosition rel = this->getRelativePosition(obj);
 
 		//change obj's direction
 		GLfloat* objDir = obj->getDirection();
@@ -127,20 +145,40 @@ void Border::interact(Object *obj) {
 }
 
 //priority: north, east, south, west
-Border::RelativePosition Border::getRelativePosition(GLfloat _position[3]) {
+Border::RelativePosition Border::getRelativePosition(Object *obj) {
 	//x-axis: left(-) to right(+). z-axis: top(-) to bottom(+)
-	if (_position[2] <= this->position[2] - this->width/2)
+	GLfloat* objPos = obj->getPosition();
+	GLfloat colRadius = obj->getCollisionRadius();
+
+	if (objPos[2] - colRadius <= this->position[2] - this->width/2 &&
+			objPos[0] - colRadius <= this->position[0] + this->length/2 &&
+			objPos[0] + colRadius >= this->position[0] - this->length/2 ) {
+		delete[] objPos;
 		return RelativePosition::NORTH;
+	}
 
-	if (_position[0] >= this->position[0] + this->length/2)
+	if (objPos[0] + colRadius >= this->position[0] + this->length/2 &&
+			objPos[2] + colRadius >= this->position[2] - this->width/2 &&
+			objPos[2] - colRadius <= this->position[2] + this->width/2) {
+		delete[] objPos;
 		return RelativePosition::EAST;
+	}
 
-	if (_position[2] >= this->position[2] + this->width/2)
+	if (objPos[2] + colRadius >= this->position[2] + this->width/2 &&
+			objPos[0] - colRadius <= this->position[0] + this->length/2 &&
+			objPos[0] + colRadius >= this->position[0] - this->length/2 ) {
+		delete[] objPos;
 		return RelativePosition::SOUTH;
+	}
 
-	if (_position[0] <= this->position[0] - this->length/2)
+	if (objPos[0] - colRadius <= this->position[0] - this->length/2 &&
+			objPos[0] - colRadius <= this->position[0] + this->length/2 &&
+			objPos[0] + colRadius >= this->position[0] - this->length/2 ) {
+		delete[] objPos;
 		return RelativePosition::WEST;
+	}
 
+	delete[] objPos;
 	return RelativePosition::INVALID;
 }
 
