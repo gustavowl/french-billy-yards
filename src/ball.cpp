@@ -73,23 +73,9 @@ bool Ball::checkCollision(Object* obj) {
 
 void Ball::interact(Object *obj) {
 	if (this->checkCollision(obj)) {
-		//calculates collision vector (angle)
-		//collisionVec simulates sine and cosine
-		//(EASTER EGG: sine, sine, cosine, sine, 3.14159)
-		GLfloat* objPos = obj->getPosition();
-		//direction of obj will be changed, therefore
-		//collision vector is OBJ - THIS
-		GLfloat* collisionVec = this->calculateVector(this->position, objPos);
-		this->normalizeVector(collisionVec);
-		delete[] objPos;
-
 		GLfloat* objDir = obj->getDirection();
-		//sums direction vectors
-		GLfloat dirSum[3] = {0.f, 0.f, 0.f};
-		for (int i = 0; i < 3; i++)
-			dirSum[i] = this->direction[i] + objDir[i];
 
-		printf("\tBEFORE COLLISION\n");
+		/*printf("\tBEFORE COLLISION\n");
 		for (int i = 0; i < 3; i++) {
 			printf("this[%d] = %f | ", i, this->direction[i]);
 		}
@@ -97,23 +83,61 @@ void Ball::interact(Object *obj) {
 		//printf("\n");
 		for (int i = 0; i < 3; i++)
 			printf("obj[%d] = %f | ", i, objDir[i]);
-		printf("speed = %f\n", obj->getSpeed());
+		printf("speed = %f\n", obj->getSpeed());*/
 
-		//changes object's speed depending on collision angle
+		//calculates collision vector (angle)
+		//collisionVec simulates sine and cosine
+		//(EASTER EGG: sine, sine, cosine, sine, 3.14159)
+		GLfloat* collisionObj = this->getCollisionVector(obj, this);
+		GLfloat* collisionThis = this->getCollisionVector(this, obj);
+		GLfloat thetaObj = this->getCollisionAngle(objDir, collisionObj);
+		GLfloat thetaThis = this->getCollisionAngle(this->direction, collisionThis);
+		printf("-----------------%f------------------\n", thetaThis * 180.0 / PI);
+		printf("-----------------%f------------------\n", thetaObj * 180.0 / PI);
+
+		//backtracks collision (to remove overlaping)
+		GLfloat* objPos = obj->getPosition();
+		GLfloat* thisPos = this->getPosition();
 		GLfloat objSpeed = obj->getSpeed();
-		GLfloat theta = acos( this->innerProduct(collisionVec, dirSum) /
-			( sqrt(this->innerProduct(collisionVec, collisionVec) *
-			 this->innerProduct(dirSum, dirSum)) ) );
-		/*GLfloat theta = acos( this->innerProduct(collisionVec, collisionVec) /
-			( this->innerProduct(collisionVec, collisionVec) ));*/
-		if (theta > PI/2)
-			theta = PI - theta;
-		obj->setSpeed(pow(sin(theta),2) * objSpeed + pow(cos(theta),2) * this->speed);
-		printf("----------------------------%f-----------------------------\n", theta * 180.0 / PI);
-		printf("----------------------------%f-----------------------------\n", obj->getSpeed());
+		for (int i = 0; i < 3; i++) {
+			objPos[i] -= objDir[i] * objSpeed;
+			thisPos[i] -= this->direction[i] * this->speed;
+		}
+		//objPos and thisPos are now in the point equivalent to previous iteration
+		//calculates previous distance.
+		GLfloat* previousVec = this->calculateVector(objPos, thisPos);
+		GLfloat dist = sqrt(this->innerProduct(previousVec, previousVec));
+		dist = dist - this->collisionRadius - obj->getCollisionRadius(); //gap before collision
+		delete[] previousVec;
+		GLfloat delta = 0.f; //distance variation: from time0 to time1
+		for (int i = 0; i < 3; i++)
+			delta += pow(objDir[i] * objSpeed - this->direction[i] * this->speed, 2);
+		delta = sqrt(delta); //diagonal variation
+		GLfloat time = dist / delta;
+		for (int i = 0; i < 3; i++) {
+			objPos[i] += objDir[i] * objSpeed * time;
+			thisPos[i] += this->direction[i] * this->speed * time; 
+		}		
+		//ASSERT
+		printf("collision radius sum: %f\n", this->collisionRadius + obj->getCollisionRadius());
+		GLfloat* assert = this->calculateVector(objPos, thisPos);
+		printf("new positions distante: %f\n", sqrt(this->innerProduct(assert, assert)));
+
+		this->setPosition(thisPos);
+		obj->setPosition(objPos);
+		this->setSpeed(0.f);
+		obj->setSpeed(0.f);
+		delete[] objPos;
+		delete[] thisPos;
+
+		/*
+		//changes object's speed depending on collision angle
+		//obj->setSpeed(pow(sin(thetaObj),2) * objSpeed + pow(cos(thetaThis),2) * this->speed);
+		obj->setSpeed(objSpeed + cos(thetaThis) * this->speed - cos(thetaObj) * objSpeed );
 
 		//changes this' speed depending on collision angle
-		this->setSpeed(pow(sin(theta),2) * this->speed + pow(cos(theta),2) * objSpeed);
+		//this->setSpeed(pow(sin(thetaThis),2) * this->speed + pow(cos(thetaObj),2) * objSpeed);
+		this->setSpeed(this->speed + cos(thetaObj) * objSpeed - cos(thetaThis) * this->speed);
 
 		//copies objDir before changing it for future calculations
 		GLfloat copyObjDir[3];
@@ -123,13 +147,14 @@ void Ball::interact(Object *obj) {
 		//change object's direction
 		for (int i = 0; i < 3; i ++)
 			//objDir[i] += collisionVec[i];
-			objDir[i] += cos(theta) * (-objDir[i]) + cos(theta) * this->direction[i];
+			objDir[i] += cos(thetaObj) * (- collisionObj[i]) + cos(thetaThis) * this->direction[i];
 		this->normalizeVector(objDir);
 		obj->setDirection(objDir);
 
 		//change this direction
 		for (int i = 0; i < 3; i++)
-			this->direction[i] = cos(theta) * (-this->direction[i]) + cos(theta) * copyObjDir[i];
+			this->direction[i] += cos(thetaThis) * (- collisionThis[i]) +
+				cos(thetaObj) * copyObjDir[i];
 		this->normalizeVector(this->direction);
 
 		//TODO: DELETE ME - RESET
@@ -143,16 +168,43 @@ void Ball::interact(Object *obj) {
 		for (int i = 0; i < 3; i++)
 			printf("obj[%d] = %f | ", i, objDir[i]);
 		printf("speed = %f\n", obj->getSpeed());
-		for (int i = 0; i < 3; i++)
-			printf("collisionVec[%d] = %f | ", i, collisionVec[i]);
-		printf("\n");
-		for (int i = 0; i < 3; i++)
-			printf("dirSum[%d] = %f | ", i, dirSum[i]);
 		printf("\n==========================\n\n");
 		
-		delete[] collisionVec;
+		delete[] collisionObj;
+		delete[] collisionThis;
 		delete[] objDir;
+		//TELEPORT GO
+		//this->position[0] += 0.5; this->position[2] += 0.5; */
 	}
+}
+
+GLfloat Ball::getCollisionAngle(GLfloat* veca, GLfloat* vecb) {
+	GLfloat theta = 0.f;
+	GLfloat norma = this->innerProduct(veca, veca);
+	GLfloat normb = this->innerProduct(vecb, vecb);
+
+	if (norma != 0.f && normb != 0.f ) {
+		//collisionVec and dir are unitary
+		theta = acos(this->innerProduct(veca, vecb));
+		/*if (theta > PI/2)
+			theta = PI - theta;*/
+	}
+
+	return theta;
+}
+
+GLfloat* Ball::getCollisionVector(Object* obja, Object* objb) {
+	//objb - obja
+	GLfloat* posa = obja->getPosition();
+	GLfloat* posb = objb->getPosition();
+
+	GLfloat* collisionVec = this->calculateVector(posa, posb);
+	this->normalizeVector(collisionVec);
+
+	delete[] posa;
+	delete[] posb;
+
+	return collisionVec;
 }
 
 void Ball::draw() {
@@ -164,10 +216,10 @@ void Ball::draw() {
 	
 	glPopMatrix();
 
-	if (this->speed != 0.f) {
+	/*if (this->speed != 0.f) {
 		std::cout << "ite<" << this;
 		printf(">: %d\n", ++(this->ite));
-	}
+	}*/
 }
 
 void Ball::setSpeed(GLfloat _speed) {

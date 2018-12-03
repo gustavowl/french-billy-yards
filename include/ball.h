@@ -33,6 +33,8 @@ public:
 
 	//TODO; check Neutrino effect?
 	bool checkCollision(Object* obj) override;
+	GLfloat getCollisionAngle(GLfloat* veca, GLfloat* vecb);
+	GLfloat* getCollisionVector(Object* obja, Object* objb); //REMEMBER delete[]
 
 	//interacts with *obj. Responsible for detecting collision and calculating
 	//*obj's direction vector according to *this collision behaviour

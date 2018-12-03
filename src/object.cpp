@@ -33,6 +33,11 @@ GLfloat* Object::getPosition() {
 	return p;
 }
 
+void Object::setPosition(GLfloat _position[3]) {
+	for (int i = 0; i < 3; i++)
+		this->position[i] = _position[i];
+}
+
 GLfloat Object::getSpeed() {
 	return this->speed;
 }

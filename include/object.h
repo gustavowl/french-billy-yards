@@ -42,6 +42,7 @@ public:
 	virtual void draw() = 0;
 
 	GLfloat* getPosition(); //REMEMBER: remember to dealocate memory (delete[])
+	void setPosition(GLfloat _position[3]);
 	GLfloat getSpeed();
 	virtual void setSpeed(GLfloat _speed) = 0;
 	GLfloat* getDirection(); //REMEMBER: remember to dealocate memory (delete[])

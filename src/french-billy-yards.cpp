@@ -36,7 +36,7 @@ GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
 //GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};
 GLfloat posWhite[3] = {0.5, BALL_RADIUS, 1};
 GLfloat posRed[3] = {-0.5, BALL_RADIUS, -1};
-GLfloat posYellow[3] = {0, BALL_RADIUS, 0};
+GLfloat posYellow[3] = {0.5 - BALL_RADIUS, BALL_RADIUS, 0};
 GLfloat posTable[3] = {0, 0, 0};
 
 Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
@@ -102,9 +102,9 @@ void inicializacao() {
 	glEnable(GL_CULL_FACE);
 
 	//alters cue force TODO: dynamically
-	cue.setForce(0.5); //max
+	cue.setForce(0.2); //max
 	//cue.setForce(0.05); //min
-	cue.setAngle(cue.getAngle() + 27);
+	//cue.setAngle(cue.getAngle() + 27);
 }
 
 void moveObjects() {
@@ -204,8 +204,8 @@ int t = 0;
 void temporizador() {
 	t++;
 	//if (t == 2112) {
-	//if (t == 2112 * 50) {
-	if (t == 2112 * 500) {
+	if (t == 2112 * 15) {
+	//if (t == 2112 * 500) {
 		glutPostRedisplay();
 		t = 0;
 	}
