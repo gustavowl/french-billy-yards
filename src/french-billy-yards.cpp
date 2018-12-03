@@ -43,7 +43,7 @@ Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
 	 redBall(colorRed, posRed, BALL_RADIUS),
 	 yellowBall(colorYellow, posYellow, BALL_RADIUS);
 
-Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
+Table table(colorTable, posTable, BALL_RADIUS*3, TABLELENGTH, TABLEWIDTH);
 
 Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 //Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &yellowBall);
@@ -102,7 +102,7 @@ void inicializacao() {
 	glEnable(GL_CULL_FACE);
 
 	//alters cue force TODO: dynamically
-	cue.setForce(0.2); //max
+	cue.setForce(0.25); //max
 	//cue.setForce(0.05); //min
 	//cue.setAngle(cue.getAngle() + 27);
 }

@@ -75,7 +75,7 @@ void Ball::interact(Object *obj) {
 	if (this->checkCollision(obj)) {
 		GLfloat* objDir = obj->getDirection();
 
-		/*printf("\tBEFORE COLLISION\n");
+		printf("\tBEFORE COLLISION\n");
 		for (int i = 0; i < 3; i++) {
 			printf("this[%d] = %f | ", i, this->direction[i]);
 		}
@@ -83,19 +83,9 @@ void Ball::interact(Object *obj) {
 		//printf("\n");
 		for (int i = 0; i < 3; i++)
 			printf("obj[%d] = %f | ", i, objDir[i]);
-		printf("speed = %f\n", obj->getSpeed());*/
+		printf("speed = %f\n", obj->getSpeed());
 
-		//calculates collision vector (angle)
-		//collisionVec simulates sine and cosine
-		//(EASTER EGG: sine, sine, cosine, sine, 3.14159)
-		GLfloat* collisionObj = this->getCollisionVector(obj, this);
-		GLfloat* collisionThis = this->getCollisionVector(this, obj);
-		GLfloat thetaObj = this->getCollisionAngle(objDir, collisionObj);
-		GLfloat thetaThis = this->getCollisionAngle(this->direction, collisionThis);
-		printf("-----------------%f------------------\n", thetaThis * 180.0 / PI);
-		printf("-----------------%f------------------\n", thetaObj * 180.0 / PI);
-
-		//backtracks collision (to remove overlaping)
+		//backtracks collision (to remove overlaping), i.e. time regression
 		GLfloat* objPos = obj->getPosition();
 		GLfloat* thisPos = this->getPosition();
 		GLfloat objSpeed = obj->getSpeed();
@@ -118,19 +108,17 @@ void Ball::interact(Object *obj) {
 			objPos[i] += objDir[i] * objSpeed * time;
 			thisPos[i] += this->direction[i] * this->speed * time; 
 		}		
-		//ASSERT
-		printf("collision radius sum: %f\n", this->collisionRadius + obj->getCollisionRadius());
-		GLfloat* assert = this->calculateVector(objPos, thisPos);
-		printf("new positions distante: %f\n", sqrt(this->innerProduct(assert, assert)));
 
-		this->setPosition(thisPos);
-		obj->setPosition(objPos);
-		this->setSpeed(0.f);
-		obj->setSpeed(0.f);
-		delete[] objPos;
-		delete[] thisPos;
+		//calculates collision vector (angle)
+		//collisionVec simulates sine and cosine
+		//(EASTER EGG: sine, sine, cosine, sine, 3.14159)
+		GLfloat* collisionObj = this->getCollisionVector(obj, this);
+		GLfloat* collisionThis = this->getCollisionVector(this, obj);
+		GLfloat thetaObj = this->getCollisionAngle(objDir, collisionObj);
+		GLfloat thetaThis = this->getCollisionAngle(this->direction, collisionThis);
+		printf("-----------------%f------------------\n", thetaThis * 180.0 / PI);
+		printf("-----------------%f------------------\n", thetaObj * 180.0 / PI);
 
-		/*
 		//changes object's speed depending on collision angle
 		//obj->setSpeed(pow(sin(thetaObj),2) * objSpeed + pow(cos(thetaThis),2) * this->speed);
 		obj->setSpeed(objSpeed + cos(thetaThis) * this->speed - cos(thetaObj) * objSpeed );
@@ -144,18 +132,29 @@ void Ball::interact(Object *obj) {
 		for (int i = 0; i < 3; i++)
 			copyObjDir[i] = objDir[i];
 
-		//change object's direction
+		//changes object's direction
 		for (int i = 0; i < 3; i ++)
 			//objDir[i] += collisionVec[i];
 			objDir[i] += cos(thetaObj) * (- collisionObj[i]) + cos(thetaThis) * this->direction[i];
 		this->normalizeVector(objDir);
 		obj->setDirection(objDir);
 
-		//change this direction
+		//changes this direction
 		for (int i = 0; i < 3; i++)
 			this->direction[i] += cos(thetaThis) * (- collisionThis[i]) +
 				cos(thetaObj) * copyObjDir[i];
 		this->normalizeVector(this->direction);
+
+		//continues movement simulation. (time regression)
+		for (int i = 0; i < 3; i++) {
+			objPos[i] += objDir[i] * obj->getSpeed() * (1.f - time);
+			thisPos[i] += this->direction[i] * this->getSpeed() * (1.f - time);
+		}
+
+		this->setPosition(thisPos);
+		obj->setPosition(objPos);
+		delete[] objPos;
+		delete[] thisPos;
 
 		//TODO: DELETE ME - RESET
 		//this->position[0] = this->position[2] = 0;
@@ -173,8 +172,6 @@ void Ball::interact(Object *obj) {
 		delete[] collisionObj;
 		delete[] collisionThis;
 		delete[] objDir;
-		//TELEPORT GO
-		//this->position[0] += 0.5; this->position[2] += 0.5; */
 	}
 }
 
