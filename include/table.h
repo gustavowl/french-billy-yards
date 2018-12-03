@@ -4,14 +4,14 @@
 #include <GL/glut.h>
 #include "object.h"
 #include "border.h"
-
+#include "texture.h"
 class Table : public Object {
-	//TODO: add texture
 private:
 	GLfloat color[3];
 	GLfloat length; //along x-axis
 	GLfloat width; //along z-axis
 	Border borders[4];
+	Texture tex;
 
 public:
 	Table();
@@ -32,10 +32,15 @@ public:
 	//*obj's direction vector according to *this collision behaviour
 	virtual void interact(Object* obj) override;
 
+	//TODO draw texture
 	void draw() override;
 
 	//overrides operator
 	void operator=(const Table &table);
+
+	void setTexture(Texture _tex){
+		this->tex = _tex;
+	};
 
 };
 
