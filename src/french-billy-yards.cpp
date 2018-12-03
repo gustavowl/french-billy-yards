@@ -72,11 +72,7 @@ void inicializacao() {
 	glEnable(GL_DEPTH_TEST);
 	
 	//TEXTURE
-	glEnable(GL_TEXTURE);
-	glGenTextures (1, &billy_tex.texName);
-    billy_tex.readPPM("imgs/billy.ppm");
-    billy_tex.loadTexture();
-	table.setTexture(billy_tex);
+	//glEnable(GL_TEXTURE);
 
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);

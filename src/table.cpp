@@ -54,6 +54,10 @@ Table::Table(GLfloat _color[3], GLfloat _position[3], GLfloat _borderThickness,
 				borderDim[i][1], borderDim[i][2]);
 		this->borders[i] = b;
 	}
+	// TEXTURE
+	glGenTextures (1, &tex.texName);
+    tex.readPPM("imgs/billy.ppm");
+    tex.loadTexture();
 }
 
 void Table::move() {

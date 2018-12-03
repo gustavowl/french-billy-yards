@@ -37,11 +37,6 @@ public:
 
 	//overrides operator
 	void operator=(const Table &table);
-
-	void setTexture(Texture _tex){
-		this->tex = _tex;
-	};
-
 };
 
 #endif
