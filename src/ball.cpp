@@ -46,6 +46,11 @@ void Ball::move() {
 
 		this->setSpeed(this->speed - friction);
 	}
+
+	/*std::cout << "Ball<" << this << "> ";
+	for (int i = 0; i < 3; i++)
+		printf("[%d]: %f | ", i, this->position[i]);
+	printf("speed: %f\n", this->speed);*/
 }
 
 GLfloat* Ball::getClosestPoint(Object* obj) {

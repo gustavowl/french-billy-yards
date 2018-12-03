@@ -31,19 +31,19 @@ GLfloat colorCue[3] = {0.4, 0.2, 0.0};
 
 GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
 
-//GLfloat posWhite[3] = {0, BALL_RADIUS, 0};
-//GLfloat posRed[3] = {1.5, BALL_RADIUS, 1};
-//GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};
-GLfloat posWhite[3] = {0.5, BALL_RADIUS, 1};
-GLfloat posRed[3] = {-0.5, BALL_RADIUS, -1};
-GLfloat posYellow[3] = {0.5 - BALL_RADIUS, BALL_RADIUS, 0};
+/*GLfloat posWhite[3] = {0, BALL_RADIUS, 0};
+GLfloat posRed[3] = {1.5, BALL_RADIUS, 1};
+GLfloat posYellow[3] = {-1.5, BALL_RADIUS, -1};*/
+GLfloat posWhite[3] = {1.774145, BALL_RADIUS, 0.659731};
+GLfloat posRed[3] = {-4.555485, BALL_RADIUS, 0.802723};
+GLfloat posYellow[3] = {-2.471037, BALL_RADIUS, -1.997582};
 GLfloat posTable[3] = {0, 0, 0};
 
 Ball whiteBall(colorWhite, posWhite, BALL_RADIUS),
 	 redBall(colorRed, posRed, BALL_RADIUS),
 	 yellowBall(colorYellow, posYellow, BALL_RADIUS);
 
-Table table(colorTable, posTable, BALL_RADIUS*3, TABLELENGTH, TABLEWIDTH);
+Table table(colorTable, posTable, BALL_RADIUS*2, TABLELENGTH, TABLEWIDTH);
 
 Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &whiteBall);
 //Cue cue(colorCue, 0.021, 0.042, 5.35, 50, 20, &yellowBall);
@@ -104,7 +104,7 @@ void inicializacao() {
 	//alters cue force TODO: dynamically
 	cue.setForce(0.25); //max
 	//cue.setForce(0.05); //min
-	//cue.setAngle(cue.getAngle() + 27);
+	cue.setAngle(53);
 }
 
 void moveObjects() {
@@ -157,6 +157,7 @@ void funcaoDisplay() {
 
 	glFlush();
 	glutSwapBuffers();
+	//printf("\t\tLOOP\t\t\n");
 }
 
 void funcaoKeyboard(unsigned char key, int x, int y) {
@@ -183,8 +184,29 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 
 	//cue controls
 	else if (cue.getVisible()) {
-		if (key == ' ')
+		if (key == ' ') {
 			cue.shoot();
+			printf("Shot angle: %f\n", cue.getAngle());
+			printf("White ball = ");
+			GLfloat* pos = whiteBall.getPosition();
+			for (int i = 0; i < 3; i++)
+				printf("[%d]: %f | ", i, pos[i]);
+			delete[] pos;
+			printf("\n");
+			printf("Red ball = ");
+			pos = redBall.getPosition();
+			for (int i = 0; i < 3; i++)
+				printf("[%d]: %f | ", i, pos[i]);
+			delete[] pos;
+			printf("\n");
+			printf("Yellow ball = ");
+			pos = yellowBall.getPosition();
+			for (int i = 0; i < 3; i++)
+				printf("[%d]: %f | ", i, pos[i]);
+			delete[] pos;
+			printf("\n\n");
+
+		}
 		else if (key == 'a' || key == 's')
 			cue.setAngle(cue.getAngle() - 1); //rotate clockwise
 		else if (key == 'd' || key == 'w')

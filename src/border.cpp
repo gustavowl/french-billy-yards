@@ -63,54 +63,13 @@ GLfloat* Border::getClosestPoint(Object* obj) {
 }
 
 bool Border::checkCollision(Object* obj) {
-	bool ret = false;
-	GLfloat* closestPoint = this->getClosestPoint(obj);
-
-	if (closestPoint != NULL) {
-		GLfloat* objPos = obj->getPosition();
-		RelativePosition rel = this->getRelativePosition(obj);
-		switch (rel) {
-			case RelativePosition::NORTH:
-				if (closestPoint[2] <= objPos[2] + obj->getCollisionRadius()) {
-					//printf("NORTH: %f ", closestPoint[2]);
-					ret = true;
-				}
-				break;
-			case RelativePosition::SOUTH:
-				if (closestPoint[2] >= objPos[2] - obj->getCollisionRadius()) {
-					//printf("SOUTH: %f ", closestPoint[2]);
-					ret = true;
-				}
-				break;
-			case RelativePosition::EAST:
-				if (closestPoint[0] >= objPos[0] - obj->getCollisionRadius()) {
-					//printf("EAST: %f ", closestPoint[0]);
-					ret = true;
-				}
-				break;
-			case RelativePosition::WEST:
-				if (closestPoint[0] <= objPos[0] + obj->getCollisionRadius()) {
-					//printf("wEST: %f\n", closestPoint[0]);
-					ret = true;
-				}
-				break;
-			default: //INVALID
-				/*printf("\nINVALID[x:%f][z:%f] ", closestPoint[0],
-						closestPoint[2]);*/
-				break;
-		}
-
-		delete[] objPos;
-		delete[] closestPoint;
-
-		/*if(ret) {
-			printf("enum: %d\t", (int)rel);
-			for (int i = 0; i < 3; i++)
-				printf("pos[%d]=%f | ", i, closestPoint[i]);
-			printf("\n");
-		}*/
-	}
-
+	GLfloat* objPos = obj->getPosition();
+	GLfloat radius = obj->getCollisionRadius();
+	bool ret = (objPos[0] - radius < this->position[0] + this->length/2) &&
+		(objPos[0] + radius > this->position[0] - this->length/2) &&
+		(objPos[2] + radius > this->position[2] - this->width/2) &&
+		(objPos[2] - radius < this->position[2] + this->width/2);
+	delete[] objPos;
 	return ret;
 }
 
