@@ -7,6 +7,7 @@
 #include "ball.h"
 #include "table.h"
 #include "cue.h"
+#include "texture.h"
 #include <vector>
 
 #ifndef PI
@@ -29,7 +30,9 @@ GLfloat colorYellow[3] = {1, 1, 0};
 GLfloat colorTable[4] = {0, 0.1, 0, 1};
 GLfloat colorCue[3] = {0.4, 0.2, 0.0};
 
-GLfloat posicaoLuz[4]={0.0, 0.0, 50.0, 1.0};
+GLfloat posicaoLuz[4]={0.0, 5.0, 3.0, 1.0};
+GLfloat diff[4] = {1, 1, 1, 1};
+GLfloat ambient[4] = {0, 0, 0.01, 1};
 
 /*GLfloat posWhite[3] = {0, BALL_RADIUS, 0};
 GLfloat posRed[3] = {1.5, BALL_RADIUS, 1};
@@ -54,20 +57,8 @@ std::vector<Object*> objs = {&table, &whiteBall, &redBall,
 	&yellowBall, &cue};
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
-unsigned char* data;
-int width, height;
 GLuint* tex_v;
-
-
-void loadPPM(char *filename) {
-    FILE *arq = fopen(filename, "r");
-    char format[3];
-    int max;
-    fscanf(arq, "%s %d %d %d\n", format, &width, &height, &max);
-    data = (unsigned char *) malloc(sizeof(unsigned char)*width*height*3);
-    fread(data, sizeof(unsigned char), width*height*3, arq);
-    fclose(arq);
-}
+Texture billy_tex;
 
 float randomf() {
 	return ((float)rand())/RAND_MAX;
@@ -77,19 +68,14 @@ double degress_to_rad(int degrees) {
 	return degrees * PI / 180.0;
 }
 void inicializacao() {
-	//TODO
-	GLfloat diffspec[4] = {1, 1, 1, 1};
-	GLfloat ambient[4] = {0, 0, 0, 1};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffspec);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, diffspec);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz);
-	
+	//LIGHTING 
+	glShadeModel(GL_SMOOTH);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
+	
+	//TEXTURE
 	//glEnable(GL_TEXTURE);
-	glShadeModel(GL_SMOOTH);
 
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);
@@ -151,6 +137,11 @@ void funcaoDisplay() {
 
 	gluLookAt(camera_eye[0], camera_eye[1], camera_eye[2],
 		0, 0, 0, 0, 1, 0);
+
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+	//glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+	//glLightfv(GL_LIGHT0, GL_SPECULAR, posicaoLuz);
+	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz);
 
 	moveObjects();
 	drawObjects();
