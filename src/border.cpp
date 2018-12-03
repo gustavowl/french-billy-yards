@@ -76,30 +76,54 @@ bool Border::checkCollision(Object* obj) {
 void Border::interact(Object *obj) {
 	if (this->checkCollision(obj)) {
 		std::cout << "-----obj<" << obj << "> collided with border <" << this << ">-----\n";
-		RelativePosition rel = this->getRelativePosition(obj);
-
-		//change obj's direction
+		//backtracks obj (ball). DELOREAN TIME!
+		GLfloat* objPos = obj->getPosition();
 		GLfloat* objDir = obj->getDirection();
-
-		//mirros z-axis
-		if (rel == RelativePosition::NORTH && objDir[2] > 0.f)
-			objDir[2] *= -1;
-
-		//mirros z-axis
-		else if	(rel == RelativePosition::SOUTH && objDir[2] < 0.f)
-			objDir[2] *= -1;
-
-		//mirros x-axis
-		else if (rel == RelativePosition::EAST && objDir[0] < 0.f)
-			objDir[0] *= -1;
+		GLfloat objSpeed = obj->getSpeed();
+		for (int i = 0; i < 3; i++)
+			objPos[i] -= objDir[i] * objSpeed;
+		//object is now at previous iteration.
+		//calculate collision position.
+		GLfloat time = 0.f;
+		RelativePosition rel = getRelativePosition(obj);
+		if (rel == RelativePosition::NORTH || rel == RelativePosition::SOUTH) {
+			//z-axis
+			GLfloat delta = abs(objPos[2] - this->position[2]) -
+				obj->getCollisionRadius() - this->width/2;
+			time = delta / abs(objDir[2] * objSpeed);
+		}
+		else if (rel != RelativePosition::INVALID) {
+			//x-axis: EAST or WEST
+			GLfloat delta = abs(objPos[0] - this->position[0]) -
+				obj->getCollisionRadius() - this->length/2;
+			time = delta / abs(objDir[0] * objSpeed);
+		}
+		else {
+			//TODO: exception
+		}
 		
-		else if (rel == RelativePosition::WEST && objDir[0] > 0.f)
-			objDir[0] *= -1;
+		for (int i = 0; i < 3; i++)
+			objPos[i] += objDir[i] * objSpeed * time;
 
+		if (rel == RelativePosition::NORTH || rel == RelativePosition::SOUTH)
+			objDir[2] *= -1;
+		else if (rel != RelativePosition::INVALID)
+			objDir[0] *= -1;
+		else {
+			//TODO: exception
+		}
+
+		for (int i = 0; i < 3; i++)
+			objPos[i] += objDir[i] * objSpeed * (1.f - time);
+		for (int i = 0; i < 3; i++)
+			printf("objDir[%d] : %f | ", i, objDir[i]);
+		printf("Speed: %f\n", objSpeed);
+
+		obj->setPosition(objPos);
 		obj->setDirection(objDir);
 
+		delete[] objPos;
 		delete[] objDir;
-
 	}
 }
 
