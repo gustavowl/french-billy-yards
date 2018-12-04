@@ -42,13 +42,6 @@ GLfloat Object::getSpeed() {
 	return this->speed;
 }
 
-/*void Object::setSpeed(GLfloat _speed) {
-	printf("DELETE NEXT LINE\n");
-	if (_speed == 0.f)
-		this->ite = 0;
-	this->speed = _speed;
-}*/
-
 GLfloat* Object::getDirection() {
 	GLfloat* d = new GLfloat[3];
 	for (int i = 0; i < 3; i++)

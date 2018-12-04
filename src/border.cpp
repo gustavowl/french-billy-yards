@@ -31,10 +31,7 @@ GLfloat* Border::getClosestPoint(Object* obj) {
 	GLfloat* objPos = obj->getPosition();
 
 	ret[1] = this->position[1];
-	/*for (int i = 0; i < 3; i++)
-		printf("(closest point) objPos: %f ", objPos[i]);*/
 	RelativePosition rel = this->getRelativePosition(obj);
-	//printf("%d\n", (int)rel);
 	switch (rel) {
 		case RelativePosition::NORTH:
 			ret[0] = objPos[0];
@@ -75,7 +72,6 @@ bool Border::checkCollision(Object* obj) {
 
 void Border::interact(Object *obj) {
 	if (this->checkCollision(obj)) {
-		std::cout << "-----obj<" << obj << "> collided with border <" << this << ">-----\n";
 		//backtracks obj (ball). DELOREAN TIME!
 		GLfloat* objPos = obj->getPosition();
 		GLfloat* objDir = obj->getDirection();
@@ -115,9 +111,6 @@ void Border::interact(Object *obj) {
 
 		for (int i = 0; i < 3; i++)
 			objPos[i] += objDir[i] * objSpeed * (1.f - time);
-		for (int i = 0; i < 3; i++)
-			printf("objDir[%d] : %f | ", i, objDir[i]);
-		printf("Speed: %f\n", objSpeed);
 
 		obj->setPosition(objPos);
 		obj->setDirection(objDir);
@@ -166,9 +159,7 @@ Border::RelativePosition Border::getRelativePosition(Object *obj) {
 }
 
 void Border::setSpeed(GLfloat _speed) {
-	printf("BORDER SET SPEED\n");
 	if (_speed <= 0.f) {
-		this->ite = 0;
 		_speed = 0.f;
 	}
 	this->speed = _speed;

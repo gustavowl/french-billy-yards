@@ -107,9 +107,7 @@ void Table::interact(Object *obj) {
 }
 
 void Table::setSpeed(GLfloat _speed) {
-	printf("TABLE SETSPEED\n");
 	if (_speed <= 0.f) {
-		this->ite = 0.f;
 		_speed = 0.f;
 	}
 	this->speed = _speed;

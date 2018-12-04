@@ -20,9 +20,7 @@ void Cue::interact(Object *obj) {
 }
 
 void Cue::setSpeed(GLfloat _speed) {
-	printf("SET CUE SPEED\n");
 	if (_speed <= 0.f) {
-		this->ite = 0;
 		_speed = 0.f;
 	}
 	this->speed = _speed;
@@ -132,7 +130,6 @@ void Cue::shoot() {
 	//TODO: calculate lots of stuff
 	//TODO: calculate mass and acceleration
 	//TODO: calculate shot direction
-	printf("\n=====================================SHOOT===================================\n\n");
 	if (this->visible) {
 		this->ball->setDirection(this->direction);
 		this->ball->setSpeed(this->force);

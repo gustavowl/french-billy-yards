@@ -46,11 +46,6 @@ void Ball::move() {
 
 		this->setSpeed(this->speed - friction);
 	}
-
-	/*std::cout << "Ball<" << this << "> ";
-	for (int i = 0; i < 3; i++)
-		printf("[%d]: %f | ", i, this->position[i]);
-	printf("speed: %f\n", this->speed);*/
 }
 
 GLfloat* Ball::getClosestPoint(Object* obj) {
@@ -79,16 +74,6 @@ bool Ball::checkCollision(Object* obj) {
 void Ball::interact(Object *obj) {
 	if (this->checkCollision(obj)) {
 		GLfloat* objDir = obj->getDirection();
-
-		printf("\tBEFORE COLLISION\n");
-		for (int i = 0; i < 3; i++) {
-			printf("this[%d] = %f | ", i, this->direction[i]);
-		}
-		printf("speed = %f\n", this->getSpeed());
-		//printf("\n");
-		for (int i = 0; i < 3; i++)
-			printf("obj[%d] = %f | ", i, objDir[i]);
-		printf("speed = %f\n", obj->getSpeed());
 
 		//backtracks collision (to remove overlaping), i.e. time regression
 		GLfloat* objPos = obj->getPosition();
@@ -121,8 +106,6 @@ void Ball::interact(Object *obj) {
 		GLfloat* collisionThis = this->getCollisionVector(this, obj);
 		GLfloat thetaObj = this->getCollisionAngle(objDir, collisionObj);
 		GLfloat thetaThis = this->getCollisionAngle(this->direction, collisionThis);
-		printf("-----------------%f------------------\n", thetaThis * 180.0 / PI);
-		printf("-----------------%f------------------\n", thetaObj * 180.0 / PI);
 
 		//changes object's speed depending on collision angle
 		//obj->setSpeed(pow(sin(thetaObj),2) * objSpeed + pow(cos(thetaThis),2) * this->speed);
@@ -160,20 +143,6 @@ void Ball::interact(Object *obj) {
 		obj->setPosition(objPos);
 		delete[] objPos;
 		delete[] thisPos;
-
-		//TODO: DELETE ME - RESET
-		//this->position[0] = this->position[2] = 0;
-		//this->position[1] = -2;
-		printf("\tAFTER COLLISION\n");
-		for (int i = 0; i < 3; i++) {
-			printf("this[%d] = %f | ", i, this->direction[i]);
-		}
-		printf("speed = %f\n", this->getSpeed());
-		for (int i = 0; i < 3; i++)
-			printf("obj[%d] = %f | ", i, objDir[i]);
-		printf("speed = %f\n", obj->getSpeed());
-		printf("\n==========================\n\n");
-		
 		delete[] collisionObj;
 		delete[] collisionThis;
 		delete[] objDir;
@@ -217,22 +186,15 @@ void Ball::draw() {
 	glutSolidSphere(this->radius, this->linesOfLongitude, this->linesOfLongitude);
 	
 	glPopMatrix();
-
-	/*if (this->speed != 0.f) {
-		std::cout << "ite<" << this;
-		printf(">: %d\n", ++(this->ite));
-	}*/
 }
 
 void Ball::setSpeed(GLfloat _speed) {
-	//printf("BALL SET SPEED\n");
 	if (_speed < 0.f)
 		_speed = 0.f;
 
 	if (_speed == 0.f) {
 		for (int i = 0; i < 3; i++)
 			this->direction[i] = 0.f;
-		this->ite = 0;
 	}
 
 	this->speed = _speed;
