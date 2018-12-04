@@ -148,7 +148,6 @@ void funcaoDisplay() {
 
 	glFlush();
 	glutSwapBuffers();
-	//printf("\t\tLOOP\t\t\n");
 }
 
 void funcaoKeyboard(unsigned char key, int x, int y) {
@@ -175,29 +174,8 @@ void funcaoKeyboard(unsigned char key, int x, int y) {
 
 	//cue controls
 	else if (cue.getVisible()) {
-		if (key == ' ') {
+		if (key == ' ')
 			cue.shoot();
-			printf("Shot angle: %f\n", cue.getAngle());
-			printf("White ball = ");
-			GLfloat* pos = whiteBall.getPosition();
-			for (int i = 0; i < 3; i++)
-				printf("[%d]: %f | ", i, pos[i]);
-			delete[] pos;
-			printf("\n");
-			printf("Red ball = ");
-			pos = redBall.getPosition();
-			for (int i = 0; i < 3; i++)
-				printf("[%d]: %f | ", i, pos[i]);
-			delete[] pos;
-			printf("\n");
-			printf("Yellow ball = ");
-			pos = yellowBall.getPosition();
-			for (int i = 0; i < 3; i++)
-				printf("[%d]: %f | ", i, pos[i]);
-			delete[] pos;
-			printf("\n\n");
-
-		}
 		else if (key == 'a' || key == 's')
 			cue.setAngle(cue.getAngle() - 1); //rotate clockwise
 		else if (key == 'd' || key == 'w')

@@ -1,8 +1,6 @@
 #ifndef __OBJECT_H__
 #define __OBJECT_H__
 
-#include <stdio.h>
-#include <iostream>
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <math.h>
@@ -18,7 +16,6 @@ protected:
 	GLfloat speed;
 	GLfloat direction[3];
 	GLfloat collisionRadius;
-	int ite = 0; //TODO: DELETE ME
 
 	void object();
 	void object(const GLfloat _position[3]);

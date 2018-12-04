@@ -35,6 +35,6 @@ void Texture::readPPM(const char* filename) {
         image.pixels = (unsigned char *) malloc(sizeof(unsigned char)*image.width*image.height*3);
         fread(image.pixels, sizeof(unsigned char), image.width*image.height*3, arq);
         fclose(arq);
-        printf("IMAGEM LIDA COM SUCESSO! PATH= %s",filename);
+        printf("IMAGEM LIDA COM SUCESSO! PATH= %s\n",filename);
     }
 }
