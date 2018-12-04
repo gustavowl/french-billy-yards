@@ -74,7 +74,7 @@ void inicializacao() {
 	glEnable(GL_DEPTH_TEST);
 	
 	//TEXTURE
-	tex.setFileName("/home/petcc/Downloads/photos_2017_11_3_fst_moss-texture.ppm");
+	tex.setFileName("imgs/photos_2017_11_3_fst_moss-texture.ppm");
 
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);
@@ -122,6 +122,7 @@ void moveObjects() {
 }
 
 void drawObjects() {
+	//TEXTURE 
 	glPushAttrib(GL_LIGHTING_BIT);
 		GLfloat teste[3]={1,1,1};
 		tex.activeTex();
