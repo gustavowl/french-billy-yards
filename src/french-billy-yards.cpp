@@ -57,8 +57,7 @@ std::vector<Object*> objs = {&table, &whiteBall, &redBall,
 	&yellowBall, &cue};
 
 //https://freestocktextures.com/texture/liquid-orange-marbled-pattern,1012.html
-GLuint* tex_v;
-Texture billy_tex;
+Texture tex;
 
 float randomf() {
 	return ((float)rand())/RAND_MAX;
@@ -75,7 +74,7 @@ void inicializacao() {
 	glEnable(GL_DEPTH_TEST);
 	
 	//TEXTURE
-	//glEnable(GL_TEXTURE);
+	tex.setFileName("/home/petcc/Downloads/photos_2017_11_3_fst_moss-texture.ppm");
 
 	//cor de fundo eh cinza
 	glClearColor(0.8, 0.8, 0.8, 0.0);
@@ -123,8 +122,28 @@ void moveObjects() {
 }
 
 void drawObjects() {
+	glPushAttrib(GL_LIGHTING_BIT);
+		GLfloat teste[3]={1,1,1};
+		tex.activeTex();
+		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE,teste);
+		
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+		glPushMatrix();
+			glScalef(5,0,2.8);
+			glBegin(GL_QUADS);
+			
+			glTexCoord2f(0,1);glVertex3f(-1, 0.1, 1);
+			glTexCoord2f(1,1);glVertex3f( 1, 0.1, 1);
+			glTexCoord2f(1,0);glVertex3f( 1, 0.1, -1);
+			glTexCoord2f(0,0);glVertex3f(-1, 0.1, -1);
+			glEnd();
+		glPopMatrix();
+		glBindTexture( GL_TEXTURE_2D, 0 );
+	glPopAttrib();
 	for (unsigned int i = 0; i < objs.size(); i++) {
+			glPushAttrib(GL_LIGHTING_BIT);
 			objs[i]->draw();
+			glPopAttrib();
 	}
 }
 

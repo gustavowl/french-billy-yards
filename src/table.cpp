@@ -1,15 +1,48 @@
-/*class Table : public Object {
-	//TODO: add texture
-private:
-	GLfloat color[3];
-	GLfloat length; //along x-axis
-	GLfloat width; //along z-axis
-	Border borders[4];
-
-};
-*/
-
 #include "table.h"
+static void
+drawBox(GLfloat size)
+{
+	GLenum type = GL_QUADS;
+  static GLfloat n[6][3] =
+  {
+    {-1.0, 0.0, 0.0},
+    {0.0, 1.0, 0.0},
+    {1.0, 0.0, 0.0},
+    {0.0, -1.0, 0.0},
+    {0.0, 0.0, 1.0},
+    {0.0, 0.0, -1.0}
+  };
+  static GLint faces[6][4] =
+  {
+    {0, 1, 2, 3},
+    {3, 2, 6, 7},
+    {7, 6, 5, 4},
+    {4, 5, 1, 0},
+    {5, 6, 2, 1},
+    {7, 4, 0, 3}
+  };
+  GLfloat v[8][3];
+  GLint i;
+
+  v[0][0] = v[1][0] = v[2][0] = v[3][0] = -size / 2;
+  v[4][0] = v[5][0] = v[6][0] = v[7][0] = size / 2;
+  v[0][1] = v[1][1] = v[4][1] = v[5][1] = -size / 2;
+  v[2][1] = v[3][1] = v[6][1] = v[7][1] = size / 2;
+  v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
+  v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
+
+  for (i = 5; i >= 0; i--) {
+	if(i!=1){
+		glBegin(type);
+		glNormal3fv(&n[i][0]);
+		glVertex3fv(&v[faces[i][0]][0]);
+		glVertex3fv(&v[faces[i][1]][0]);
+		glVertex3fv(&v[faces[i][2]][0]);
+		glVertex3fv(&v[faces[i][3]][0]);
+		glEnd();
+	}
+  }
+}
 
 Table::Table() {
 	GLfloat c[3] = {0, 1, 0};
@@ -54,10 +87,6 @@ Table::Table(GLfloat _color[3], GLfloat _position[3], GLfloat _borderThickness,
 				borderDim[i][1], borderDim[i][2]);
 		this->borders[i] = b;
 	}
-	// TEXTURE
-	glGenTextures (1, &tex.texName);
-    tex.readPPM("imgs/billy.ppm");
-    tex.loadTexture();
 }
 
 void Table::move() {
@@ -87,12 +116,13 @@ void Table::setSpeed(GLfloat _speed) {
 }
 
 void Table::draw() {
+
 	//draw plane
 	glPushMatrix();
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, this->color);
 	glScalef(this->length, 0.2, this->width);
 	glTranslatef(0, -0.5, 0);
-	glutSolidCube(1);
+	drawBox(1);
 	glPopMatrix();
 	
 	//draw borders

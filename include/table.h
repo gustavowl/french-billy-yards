@@ -11,7 +11,6 @@ private:
 	GLfloat length; //along x-axis
 	GLfloat width; //along z-axis
 	Border borders[4];
-	Texture tex;
 
 public:
 	Table();

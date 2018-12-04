@@ -3,26 +3,24 @@
 #include <GL/glut.h>
 #include <fstream>
 
-struct Image
-{
-    unsigned char* pixels = NULL;
-    int width;
-    int height;
-    int numChannels;
-};
-
 class Texture
 {
-    public:
-    Texture ();
-    ~Texture ();
+public:
+    Texture (){ /* Empty */};
+    Texture (const char* _filename);
+    void activeTex(void);
+    void setFileName(const char* _filename);
 
-    void loadTexture (void);
+private:
+    const char* filename;
+    int width,height;
+    GLuint texid1=-777;
 
-    void readPPM (const char* filename);
+    unsigned char * readPPM(const char* filename);
 
-    GLuint texName;
-    Image image;
+    GLuint loadTex(const char *c);
+
+    void putImage(void);
 };
 
 #endif
